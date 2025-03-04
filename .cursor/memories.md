@@ -6,6 +6,7 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.0.1] Development: Prismaスキーマ変更後は必ずマイグレーションコマンド(prisma migrate/db push)を実行することで変更をDBに反映する必要がある。標準のmigrateコマンドが失敗した場合は`npx prisma db push`または`migrate dev --create-only`と`migrate deploy`の組み合わせを代替手段として使用。データベースの実際の状態と期待される状態の不一致は`The table does not exist`エラーとして現れる。 #database #error-handling #migration
 [v1.0.0] Development: Prismaモデル設計において、タグに色情報(color)を追加することで視覚的区別が容易になる設計を実装。感情スタンプは整数IDで管理し、フロントエンド側で対応する感情を表示する設計パターンを採用。複合インデックス(userId+entryDate)と一意制約で日記の取得効率と整合性を確保。日記コンテンツは通常テキストとマークダウン両方を保存する二重構造で柔軟性を向上。 #database #schema #design-pattern
 
 ### Note(編集不可)
