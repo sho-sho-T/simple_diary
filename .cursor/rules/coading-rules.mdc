@@ -1,5 +1,8 @@
-あなたは TypeScript、Node.js、Next.js App Router、React、Shadcn UI、Radix UI、Tailwind のエキスパートです。
-
+---
+description: コーディングのルール
+globs: 
+alwaysApply: false
+---
 コードスタイルと構造
 - 簡潔で技術的な TypeScript コードを正確な例とともに記述する
 - 関数型・宣言型プログラミングパターンを使用し、クラスは避ける

@@ -1,0 +1,159 @@
+---
+description: Next.jsにおけるベストプラクティス
+globs: 
+alwaysApply: false
+---
+以下はNext.js開発ベストプラクティスを反映しています。
+
+---
+
+## データフェッチ
+- **Server Componentsを使用**: データフェッチはClient Componentsではなく、Server Componentsで行う。
+- **コロケーション**: データフェッチはデータを参照するコンポーネントにコロケーションし、独立性を高める。
+- **ユーザー操作に基づくフェッチ**: ユーザー操作によるデータフェッチと再レンダリングには、Server Actionsと`useActionState()`を使用する。
+
+---
+
+## Request Memoization
+- **データフェッチ層の分離**: 複数のコンポーネントで利用可能なデータフェッチ処理は、データフェッチ層として分離する。
+- **ファイル構成例**:
+  - `app/products/fetcher.ts`
+  - `app/products/_lib/fetcher.ts`
+  - `app/products/_lib/fetcher/product.ts`
+- **server-onlyパッケージ**: データフェッチ層がクライアントサイドで誤って利用されないよう、`server-only`パッケージを使用する。
+
+---
+
+## 並行データフェッチ
+- **並行設計**: データフェッチが可能な限り並行になるよう設計する。
+- **コンポーネント分割**: データフェッチ単位でコンポーネントを分割する。
+- **Promise.all()の活用**: 依存関係がない不可分なデータフェッチには、`Promise.all()`または`Promise.allSettled()`と`fetch()`を組み合わせて並行実行する。
+- **N+1問題の解消**: コンポーネントの独立性向上によるN+1問題を防ぐため、DataLoaderでバッチ処理を実装する。
+
+---
+
+## 細粒度のREST API設計
+- **細粒度を意識**: App Routerは細粒度のREST APIと相性が良いため、可能な限り細かく分割した設計を行う。
+
+---
+
+## コンポーネント設計
+
+### Client Componentsのユースケース
+- **イベントハンドラ**: `onClick`などのクライアントサイド処理が必要な場合。
+- **サードパーティライブラリ**: React Server Componentsに対応していないClient Componentsを提供するライブラリを使用する場合。
+- **RSC Payloadの削減**: RSC Payloadの転送コストがパフォーマンスに影響する場合。
+
+### Compositionパターンの活用
+- **末端をClient Componentsに**: コンポーネントツリーの末端をClient Componentsにする。
+- **Server Componentsの受け渡し**: Client Componentsの`children`などのpropsにServer Componentsを渡してレンダリングする。
+
+### Container/Presentationalパターン
+- **Container Components**: データ取得を担当。
+- **Presentational Components**: データ参照を担当。
+
+### Container 1stな設計とディレクトリ構成
+- **設計方針**: 画面設計はまずContainer Componentsから始め、Presentational ComponentsやClient Componentsを後から実装する。
+- **ディレクトリ構成**:
+  ```
+  _containers
+  ├── <Container Name> // 例: `post-list`, `user-profile`
+  │  ├── index.tsx     // Container Componentsをexport
+  │  ├── container.tsx // データ取得
+  │  ├── presentational.tsx // データ表示
+  │  └── ...
+  └── ...
+  ```
+  app直下の構成:
+  ```
+  app
+  ├── <Segment>
+  │  ├── page.tsx
+  │  ├── layout.tsx
+  │  ├── _containers
+  │  │  ├── <Container Name>
+  │  │  │  ├── index.tsx
+  │  │  │  ├── container.tsx
+  │  │  │  ├── presentational.tsx
+  │  │  │  └── ...
+  │  │  └── ...
+  │  ├── _components // 汎用的なClient Components
+  │  ├── _lib        // 汎用的な関数
+  │  └── ...
+  └── ...
+  ```
+
+---
+
+## Static RenderingとFull Route Cache
+- **Static Rendering推奨**: App Routerでは可能な限りStatic Renderingを採用する。
+- **オンデマンドrevalidate**: `revalidatePath()`や`revalidateTag()`をServer ActionsやRoute Handlersで呼び出して、Data CacheやFull Route Cacheを更新する。
+- **時間ベースrevalidate**: Route Segment Configの`revalidate`で時間ベースのキャッシュ更新を設定する。
+
+---
+
+## Dynamic RenderingとData Cache
+- **Data Cacheの活用**: Dynamic Renderingでは、データフェッチ単位のData Cacheを利用してパフォーマンスを最適化する。
+
+---
+
+## Router Cache
+- **管理**: Router Cacheはクライアントサイドのキャッシュで、`prefetch`やSoft Navigation時に更新される。`staleTimes`を適切に設定し、必要に応じてrevalidateする。
+- **任意のrevalidate**: Router Cacheを任意のタイミングで更新する。
+
+---
+
+## データ操作とServer Actions
+- **Server Actionsを基本に**: データ操作はServer Actionsで実装する。
+
+---
+
+## Server Componentsの純粋性
+- **純粋性の維持**: Server Componentsは純粋であることが重要。
+- **データフェッチの一貫性**: データフェッチの一貫性を確保する。
+
+---
+
+## SuspenseとStreaming
+- **Suspenseの利用**: Dynamic Renderingで重いコンポーネントのレンダリングを`<Suspense>`で遅延させ、Streaming SSRを活用する。
+
+---
+
+## リクエストの参照とレスポンスの操作
+- **URL情報の参照**:
+  - `params` props
+  - `useParams()`
+  - `searchParams` props
+  - `useSearchParams()`
+- **ヘッダー情報の参照**: `headers()`
+- **クッキーの操作**: `cookies()`
+- **レスポンスのステータスコード**:
+  - `notFound()`
+  - `redirect()`
+  - `permanentRedirect()`
+  - `unauthorized()`
+  - `forbidden()`
+
+---
+
+## 認証と認可
+- **Cookie**: 保持する情報はCookieに保存（JWT必須）。
+- **セッション**: Redisなどにセッションを保存（JWT任意）。
+- **認証状態**: 認証状態を保持する。
+- **URL認可**: URL単位で認可を実施。
+- **データアクセス認可**: データアクセス単位で認可を実施。
+
+---
+
+## エラーハンドリング
+### Server Componentsのエラー
+- **エラーUI**: `error.tsx`でエラー時のUIを定義。
+- **Not Foundエラー**: `notFound()`呼び出し時のUIを`not-found.tsx`で定義。
+
+### Server Actionsのエラー
+- **予測可能なエラー**: `throw`せず、戻り値でエラーを表現。
+- **予測不能なエラー**: `error.tsx`で表示。
+
+---
+
+これで、マークダウン形式で整理されたルールが完成しました。CursorのProject Rulesにそのまま利用可能です。
