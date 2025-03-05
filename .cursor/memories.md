@@ -6,6 +6,11 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.0.6] Development: Next.jsのAPI Routes設計では、関連する機能ごとに_libディレクトリを配置し内部モジュールを整理することで、コードの再利用性と保守性が大幅に向上する。動的ルートパラメータと静的ルートを組み合わせたAPI階層構造により、RESTfulな設計を実現できる。ルートハンドラを対応するHTTPメソッド別に明確に分離することで、関心の分離が実現できる。 #api-design #next-js #maintainability
+[v1.0.5] Development: 認証処理の実装において、checkApiAuthのような再利用可能な認証関数を作成することで、全APIエンドポイントでの一貫した認証チェックが可能になる。早期リターンパターン（認証エラー時に即座にエラーレスポンスを返す）を採用することで、コードの可読性と保守性が向上する。NextResponseインスタンスの型チェックを活用した条件分岐により、シームレスなエラーハンドリングが実現できる。 #authentication #api #error-handling
+[v1.0.4] Development: データベースクエリ最適化において、特に過去の同日エントリー取得などの複雑なクエリでは、PrismaのfindManyとAND条件の組み合わせが効果的。日付操作（月・日の抽出など）はデータベース固有の関数に依存する場合があり、PostgreSQLではEXTRACT関数を活用。トランザクションを活用してデータ整合性を保護し、エラー発生時に自動的にロールバックされる仕組みが重要。 #database #query-optimization #performance
+[v1.0.3] Development: エラーハンドリング戦略として、Zodによる入力バリデーションとZodErrorのキャッチを組み合わせることで、クライアントに詳細なバリデーションエラーを返せる。Prismaのエラーコードパターン（特にP2002のユニーク制約違反）をキャッチしてユーザーフレンドリーなエラーメッセージに変換する実装が効果的。各種エラーに対応するcreateErrorResponse系関数を用意することで、一貫したエラーレスポンス形式を維持できる。 #error-handling #validation #user-experience
+[v1.0.2] Development: Next.jsのAPI実装において、標準化されたレスポンス形式（success, data, errorフィールドを持つオブジェクト）を採用することで、フロントエンドでの処理が統一化される。createSuccessResponseやcreateErrorResponseなどの再利用可能なユーティリティ関数を作成することで、レスポンス生成のコードが簡潔になり、一貫性と保守性が向上する。APIエンドポイントでtry-catchパターンを採用し、細分化されたエラーハンドリングを実装することで堅牢なAPIを実現できる。 #api-design #error-handling #best-practice
 [v1.0.1] Development: Prismaスキーマ変更後は必ずマイグレーションコマンド(prisma migrate/db push)を実行することで変更をDBに反映する必要がある。標準のmigrateコマンドが失敗した場合は`npx prisma db push`または`migrate dev --create-only`と`migrate deploy`の組み合わせを代替手段として使用。データベースの実際の状態と期待される状態の不一致は`The table does not exist`エラーとして現れる。 #database #error-handling #migration
 [v1.0.0] Development: Prismaモデル設計において、タグに色情報(color)を追加することで視覚的区別が容易になる設計を実装。感情スタンプは整数IDで管理し、フロントエンド側で対応する感情を表示する設計パターンを採用。複合インデックス(userId+entryDate)と一意制約で日記の取得効率と整合性を確保。日記コンテンツは通常テキストとマークダウン両方を保存する二重構造で柔軟性を向上。 #database #schema #design-pattern
 
