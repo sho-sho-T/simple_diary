@@ -6,6 +6,7 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.0.7] Development: Next.jsのApp Routerでは同じパスパターンに対して異なる動的セグメント名（スラグ名）を使用することはできない。例えば `/api/diary/[date]` と `/api/diary/[id]` は競合する。この問題は `/api/diary/by-date/[date]` のようにパスパターンを変更することで解決できる。パスの変更に伴いインポートパスも調整が必要となるが、絶対パス（@/エイリアス）を使用すると簡潔に記述できる。動的ルートの設計時には将来的な競合を避けるためにセグメント名ではなくパスパターンの分離を検討すべき。 #api-design #next-js #routing #error-fix
 [v1.0.6] Development: Next.jsのAPI Routes設計では、関連する機能ごとに_libディレクトリを配置し内部モジュールを整理することで、コードの再利用性と保守性が大幅に向上する。動的ルートパラメータと静的ルートを組み合わせたAPI階層構造により、RESTfulな設計を実現できる。ルートハンドラを対応するHTTPメソッド別に明確に分離することで、関心の分離が実現できる。 #api-design #next-js #maintainability
 [v1.0.5] Development: 認証処理の実装において、checkApiAuthのような再利用可能な認証関数を作成することで、全APIエンドポイントでの一貫した認証チェックが可能になる。早期リターンパターン（認証エラー時に即座にエラーレスポンスを返す）を採用することで、コードの可読性と保守性が向上する。NextResponseインスタンスの型チェックを活用した条件分岐により、シームレスなエラーハンドリングが実現できる。 #authentication #api #error-handling
 [v1.0.4] Development: データベースクエリ最適化において、特に過去の同日エントリー取得などの複雑なクエリでは、PrismaのfindManyとAND条件の組み合わせが効果的。日付操作（月・日の抽出など）はデータベース固有の関数に依存する場合があり、PostgreSQLではEXTRACT関数を活用。トランザクションを活用してデータ整合性を保護し、エラー発生時に自動的にロールバックされる仕組みが重要。 #database #query-optimization #performance
