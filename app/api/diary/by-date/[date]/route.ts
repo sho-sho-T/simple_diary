@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getDiaryEntryByDate } from '../_lib/diary-service';
-import { createSuccessResponse, createErrorResponse, createNotFoundError } from '../../../../lib/api-utils';
-import { dateSchema } from '../../../../lib/validations';
-import { checkApiAuth } from '../../../../lib/auth-utils';
+import { getDiaryEntryByDate } from '@/app/api/diary/_lib/diary-service';
+import { createSuccessResponse, createErrorResponse, createNotFoundError } from '@/lib/api-utils';
+import { dateSchema } from '@/lib/validations';
+import { checkApiAuth } from '@/lib/auth-utils';
 import { ZodError } from 'zod';
 
 /**
- * GET /api/diary/[date] - 特定日付の日記エントリー取得
+ * GET /api/diary/by-date/[date] - 特定日付の日記エントリー取得
  */
 export async function GET(
   req: NextRequest,
