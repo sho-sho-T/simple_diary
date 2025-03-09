@@ -6,6 +6,7 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.0.9] Development: TailwindCSSの最新バージョンではPostCSSプラグインが@tailwindcss/postcssという別パッケージに移動しており、postcss.config.mjsでは配列形式["@tailwindcss/postcss"]で指定する必要がある。Storybookでのグローバルスタイル読み込み(.storybook/preview.ts)では、Next.jsの場合app/globals.cssのように正確なファイルパスを指定する必要がある。Webpackエラーの「Module not found」は単純なパス問題に見えても、実際は依存関係の構成問題である可能性があり、StackTraceを含めた分析が重要。 #tailwindcss #storybook #error-handling #css
 [v1.0.8] Development: Next.jsのUIコンポーネント実装では、shadcnパッケージ（旧shadcn-ui）を使用する際にReact 19との互換性問題が発生することがある。このような場合は`--force`オプションを使用することで解決できる。また、コンポーネント間の相互依存関係に注意し、関連コンポーネントも一緒にインストールする必要がある。コンポーネント設計では、ui（基本UI）/layout（レイアウト）/features（機能別）の3層構造が管理しやすい。クライアントサイドで動作するアニメーション（lottie-web等）はuseEffectでクリーンアップを適切に行い、メモリリークを防止する実装が重要。 #ui-components #react #shadcn #typescript #performance
 [v1.0.7] Development: Next.jsのApp Routerでは同じパスパターンに対して異なる動的セグメント名（スラグ名）を使用することはできない。例えば `/api/diary/[date]` と `/api/diary/[id]` は競合する。この問題は `/api/diary/by-date/[date]` のようにパスパターンを変更することで解決できる。パスの変更に伴いインポートパスも調整が必要となるが、絶対パス（@/エイリアス）を使用すると簡潔に記述できる。動的ルートの設計時には将来的な競合を避けるためにセグメント名ではなくパスパターンの分離を検討すべき。 #api-design #next-js #routing #error-fix
 [v1.0.6] Development: Next.jsのAPI Routes設計では、関連する機能ごとに_libディレクトリを配置し内部モジュールを整理することで、コードの再利用性と保守性が大幅に向上する。動的ルートパラメータと静的ルートを組み合わせたAPI階層構造により、RESTfulな設計を実現できる。ルートハンドラを対応するHTTPメソッド別に明確に分離することで、関心の分離が実現できる。 #api-design #next-js #maintainability
