@@ -29,6 +29,83 @@
 - [ ] ツールバーと基本的なマークダウン操作
 - [ ] react-markdownの統合
 
+## [ID-005] マークダウンエディタ実装 - 詳細計画
+
+ステータス: [Planning]
+確信度: [95%]
+最終更新日: 2024-03-10
+
+### タスク概要
+マークダウン形式でテキストを編集できるエディタコンポーネントを実装し、リアルタイムプレビュー機能とツールバーを提供する。また、作成したコンポーネントにはStorybookを追加する。
+
+### 主要機能
+- リアルタイムプレビュー機能
+- ツールバーと基本的なマークダウン操作
+- react-markdownの統合
+- Storybook統合
+
+### 技術選定
+- **react-markdown**: マークダウンをHTMLにレンダリングするため
+- **Radix UI**: アクセシブルなUI要素のため
+- **shadcn/ui**: 既存UIコンポーネントとの統合
+- **Tailwind CSS**: スタイリング
+- **Conform** (`@conform-to/react`, `@conform-to/zod`): フォーム状態管理とバリデーション
+- **Zod**: スキーマ定義とバリデーション
+
+### 実装ステップ
+1. **基本構造の実装**
+   - [ ] `components/features/markdown/markdown-editor.tsx`: メインのエディタコンポーネント
+   - [ ] `components/features/markdown/markdown-preview.tsx`: プレビュー表示コンポーネント
+   - [ ] `components/features/markdown/markdown-toolbar.tsx`: ツールバーコンポーネント
+   - [ ] `components/conform/`: Conformとshadcn/ui統合用コンポーネント
+
+2. **機能実装**
+   - [ ] Conformを使用したマークダウンテキスト入力機能の実装
+   - [ ] Zodによるマークダウン内容の検証
+   - [ ] react-markdownを使用したプレビュー機能
+   - [ ] テキスト選択に基づくツールバー操作（太字、斜体、リスト等）
+   - [ ] マークダウンコンテンツの保存と読み込み機能
+
+3. **UIの統合とスタイリング**
+   - [ ] shadcn/uiコンポーネントとConformの統合
+   - [ ] レスポンシブデザインの実装
+   - [ ] ダークモード対応
+
+4. **Storybook実装**
+   - [ ] `stories/components/markdown-editor.stories.tsx`: エディタのStory
+   - [ ] `stories/components/markdown-preview.stories.tsx`: プレビューのStory
+   - [ ] `stories/components/markdown-toolbar.stories.tsx`: ツールバーのStory
+   - [ ] 各状態（空の状態、テキスト入力済み、エラー状態など）のストーリーバリエーション
+
+### テスト計画
+- 各コンポーネントの単体テスト
+- マークダウンの変換機能のテスト
+- ツールバー操作のテスト
+- Conformによるバリデーションのテスト
+- エッジケースの検証（大きなテキスト、特殊文字など）
+
+### 潜在的な課題と対応策
+- **パフォーマンスの問題**: 大きなマークダウンファイルでのリアルタイムレンダリングが遅くなる可能性
+  → デバウンスを実装し、react-markdownの最適化設定を活用
+
+- **UIの一貫性**: 既存UIとの統合における見た目の一貫性
+  → shadcn/uiコンポーネントを最大限活用し、デザインシステムに従う
+
+- **Conformの学習曲線**: チームメンバーがConformに慣れていない可能性
+  → 十分なドキュメントとサンプルコードを提供
+
+- **アクセシビリティ**: キーボードショートカットとスクリーンリーダー対応
+  → Conformのアクセシビリティ機能を活用し、WAI-ARIAガイドラインに従う
+
+### 依存関係
+- [ID-004]の共通UIコンポーネント構築が完了していること
+
+### 予想工数
+- 基本実装: 4-6時間
+- Conform統合: 2-3時間
+- Storybook統合: 2-3時間
+- テストとバグ修正: 2-3時間
+
 [ID-006] カレンダーと日記表示画面
 - [ ] 月間カレンダーの実装 (react-day-picker)
 - [ ] 日付選択時の日記表示
