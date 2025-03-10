@@ -1,6 +1,6 @@
 ---
 description: コーディングのルール
-globs: 
+globs: *.tsx, *.ts
 alwaysApply: false
 ---
 コードスタイルと構造

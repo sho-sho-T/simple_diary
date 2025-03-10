@@ -1,6 +1,6 @@
 ---
 description: メモリー管理ルール
-globs: 
+globs: *.tsx, *.ts
 alwaysApply: false
 ---
 ---
