@@ -112,7 +112,6 @@ export async function createDiaryEntry(
   data: {
     entryDate: Date;
     content?: string;
-    contentMarkdown?: string;
     emotionStampId?: number;
     tagIds?: string[];
   }
@@ -166,7 +165,6 @@ export async function updateDiaryEntry(
   id: string,
   data: {
     content?: string;
-    contentMarkdown?: string;
     emotionStampId?: number;
     tagIds?: string[];
   }

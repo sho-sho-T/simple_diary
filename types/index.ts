@@ -1,14 +1,13 @@
 // 日記エントリーの型定義
-export interface DiaryEntry {
+export type DiaryEntry = {
   id: string;
   userId: string;
   entryDate: Date;
   content?: string;
-  contentMarkdown?: string;
   emotionStampId?: number;
   createdAt: Date;
   updatedAt: Date;
-}
+};
 
 // タグの型定義
 export interface Tag {

@@ -23,16 +23,18 @@ export const createDiaryEntrySchema = z.object({
     required_error: '日付は必須です',
     invalid_type_error: '有効な日付を入力してください',
   }),
-  content: z.string().optional(),
-  contentMarkdown: z.string().optional(),
+  content: z.string()
+    .max(500, '日記の内容は500文字以内にしてください')
+    .optional(),
   emotionStampId: z.number().int().min(1).max(10).optional(),
   tagIds: z.array(z.string()).optional(),
 });
 
 // 日記エントリー更新のバリデーション
 export const updateDiaryEntrySchema = z.object({
-  content: z.string().optional(),
-  contentMarkdown: z.string().optional(),
+  content: z.string()
+    .max(500, '日記の内容は500文字以内にしてください')
+    .optional(),
   emotionStampId: z.number().int().min(1).max(10).optional(),
   tagIds: z.array(z.string()).optional(),
 });
