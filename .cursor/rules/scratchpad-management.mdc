@@ -6,12 +6,17 @@ alwaysApply: false
 ---
 description: スクラッチパッドシステムの管理
 globs: 
+  - "app/**/*"
+  - "components/**/*"
+  - "lib/**/*"
+  - "types/**/*"
+  - "prisma/**/*"
+  - "*.ts"
+  - "*.tsx"
+  - "*.json"
 alwaysApply: false
 ---
----
-description: スクラッチパッドシステムの管理
-globs: *
----
+
 # Scratchpad Management
 
 スクラッチパッドシステムの管理と更新に関するルール。

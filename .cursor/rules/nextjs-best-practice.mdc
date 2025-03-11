@@ -3,7 +3,21 @@ description: Next.jsにおけるベストプラクティス
 globs: 
 alwaysApply: false
 ---
-以下はNext.js開発ベストプラクティスを反映しています。
+---
+description: Next.jsにおけるベストプラクティス
+globs: 
+  - "app/**/*"
+  - "components/**/*"
+  - "lib/**/*"
+  - "types/**/*"
+  - "prisma/**/*"
+  - "*.ts"
+  - "*.tsx"
+  - "*.json"
+alwaysApply: false
+---
+
+以下はNext.js開発ベストプラクティスを反映しています。このベストプラクティスを本プロジェクトに反映させるよう努めてください
 
 ---
 

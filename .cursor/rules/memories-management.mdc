@@ -1,17 +1,22 @@
 ---
 description: メモリー管理ルール
-globs: *.tsx, *.ts
-alwaysApply: false
----
----
-description: メモリー管理ルール
 globs: 
 alwaysApply: false
 ---
 ---
 description: メモリー管理ルール
-globs: *
+globs: 
+  - "app/**/*"
+  - "components/**/*"
+  - "lib/**/*"
+  - "types/**/*"
+  - "prisma/**/*"
+  - "*.ts"
+  - "*.tsx"
+  - "*.json"
+alwaysApply: false
 ---
+
  # メモリー管理ルール
 
 メモリーファイルの管理と更新に関するルール。
