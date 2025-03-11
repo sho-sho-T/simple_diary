@@ -1,4 +1,4 @@
-import { DashboardContainer } from "@/app/components/dashboard/dashboard-container";
+import { DashboardContainer } from "@/components/dashboard/dashboard-container";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
