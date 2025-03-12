@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { DiaryForm } from '@/components/features/diary/form';
-import { DiaryFormPresentation } from '@/components/features/diary/form/presentation';
+import { DiaryForm } from '@/app/_containers/diary/form';
+import { DiaryFormPresentation } from '@/app/_containers/diary/form/presentation';
 import { DiaryFormData } from '@/types/diary/form';
 
 /**
