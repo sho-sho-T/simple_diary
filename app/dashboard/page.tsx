@@ -1,6 +1,6 @@
-import { DashboardContainer } from "@/components/dashboard/dashboard-container";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Dashboard } from "../_containers/dashboad";
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -12,5 +12,5 @@ export default async function DashboardPage() {
 
   const userName = session.user?.name || "ゲスト";
 
-  return <DashboardContainer userName={userName} />;
+  return <Dashboard userName={userName} />;
 } 
