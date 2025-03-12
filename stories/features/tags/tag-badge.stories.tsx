@@ -1,5 +1,5 @@
 import { TagBadge } from "@/app/_components/features/tags/tag-badge";
-import type { Tag } from "@/types";
+import type { Tag } from "@/app/_types";
 import type { Meta, StoryObj } from "@storybook/react";
 
 // モックデータ

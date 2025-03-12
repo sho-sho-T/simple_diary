@@ -1,6 +1,6 @@
 import { DiaryForm } from "@/app/_containers/diary/form";
 import { DiaryFormPresentation } from "@/app/_containers/diary/form/presentation";
-import type { DiaryFormData } from "@/types/diary/form";
+import type { DiaryFormData } from "@/app/_types/diary/form";
 import type { Meta, StoryObj } from "@storybook/react";
 
 /**

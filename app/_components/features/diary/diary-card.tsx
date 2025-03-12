@@ -4,8 +4,8 @@ import {
 	CardFooter,
 	CardHeader,
 } from "@/app/_components/ui/card";
+import type { DiaryEntry, Tag } from "@/app/_types";
 import { cn } from "@/lib/utils";
-import type { DiaryEntry, Tag } from "@/types";
 import { EmotionBadge } from "../emotions/emotion-badge";
 import { TagList } from "../tags/tag-list";
 import { DiaryContentPreview } from "./diary-content-preview";

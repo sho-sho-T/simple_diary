@@ -1,6 +1,6 @@
 ---
 description: コーディングのルール
-globs: 
+globs: app**/*, prisma/**/*, 
 alwaysApply: false
 ---
 ---

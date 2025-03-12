@@ -1,5 +1,5 @@
 import { DiaryCard } from "@/app/_components/features/diary/diary-card";
-import type { DiaryEntry, Tag } from "@/types";
+import type { DiaryEntry, Tag } from "@/app/_types";
 import type { Meta, StoryObj } from "@storybook/react";
 
 // モックデータ
