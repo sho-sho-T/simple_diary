@@ -1,3 +1,5 @@
+"use client";
+
 import {
 	Card,
 	CardContent,
@@ -5,6 +7,7 @@ import {
 	CardHeader,
 } from "@/app/_components/ui/card";
 import type { DiaryEntry, Tag } from "@/app/_types";
+import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { cn } from "@/lib/utils";
 import { EmotionBadge } from "../emotions/emotion-badge";
 import { TagList } from "../tags/tag-list";
@@ -12,7 +15,7 @@ import { DiaryContentPreview } from "./diary-content-preview";
 import { DiaryHeader } from "./diary-header";
 
 interface DiaryCardProps {
-	entry: DiaryEntry;
+	entry: DiaryEntryWithTags;
 	tags: Tag[];
 	className?: string;
 	isCompact?: boolean;

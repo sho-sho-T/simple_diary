@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 interface DiaryContentPreviewProps {
-	content?: string;
+	content: string | null;
 	maxLength?: number;
 	className?: string;
 }

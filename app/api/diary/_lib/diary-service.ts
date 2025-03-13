@@ -7,6 +7,7 @@ export type DiaryEntryWithTags = DiaryEntry & {
 	tags: {
 		tag: {
 			id: string;
+			userId: string;
 			name: string;
 			color: string;
 		};
@@ -33,6 +34,7 @@ export async function getAllDiaryEntries(
 					tag: {
 						select: {
 							id: true,
+							userId: true,
 							name: true,
 							color: true,
 						},
@@ -76,6 +78,7 @@ export async function getDiaryEntryByDate(
 					tag: {
 						select: {
 							id: true,
+							userId: true,
 							name: true,
 							color: true,
 						},
@@ -104,6 +107,7 @@ export async function getDiaryEntryById(
 					tag: {
 						select: {
 							id: true,
+							userId: true,
 							name: true,
 							color: true,
 						},
@@ -296,6 +300,7 @@ export async function getSimilarDateEntries(
 					tag: {
 						select: {
 							id: true,
+							userId: true,
 							name: true,
 							color: true,
 						},

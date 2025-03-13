@@ -15,7 +15,6 @@ export interface Tag {
 	userId: string;
 	name: string;
 	color: string;
-	createdAt: Date;
 }
 
 // 日記とタグの関連付け

@@ -1,3 +1,5 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
@@ -5,7 +7,7 @@ import { EmotionIcon } from "../emotions/emotion-icon";
 
 interface DiaryHeaderProps {
 	date: Date;
-	emotionStampId?: number;
+	emotionStampId: number | null;
 	className?: string;
 	showDayOfWeek?: boolean;
 }
