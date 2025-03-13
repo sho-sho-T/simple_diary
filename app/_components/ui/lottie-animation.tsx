@@ -1,6 +1,6 @@
 "use client";
 
-import lottie from "lottie-web";
+import type { AnimationItem } from "lottie-web";
 import { useEffect, useRef } from "react";
 
 interface LottieAnimationProps {
@@ -23,18 +23,26 @@ export function LottieAnimation({
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	useEffect(() => {
-		if (!containerRef.current) return;
+		let animation: AnimationItem | undefined;
 
-		const animation = lottie.loadAnimation({
-			container: containerRef.current,
-			renderer: "svg",
-			loop,
-			autoplay,
-			path: animationPath,
+		// 動的にlottie-webをインポート
+		import("lottie-web").then((lottieModule) => {
+			const lottie = lottieModule.default;
+			if (!containerRef.current) return;
+
+			animation = lottie.loadAnimation({
+				container: containerRef.current,
+				renderer: "svg",
+				loop,
+				autoplay,
+				path: animationPath,
+			});
 		});
 
 		return () => {
-			animation.destroy();
+			if (animation) {
+				animation.destroy();
+			}
 		};
 	}, [animationPath, loop, autoplay]);
 
