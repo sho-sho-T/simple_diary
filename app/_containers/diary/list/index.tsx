@@ -1,3 +1,1 @@
-import { DiaryListContainer } from "./container";
-
-export { DiaryListContainer as DiaryList };
+export { DiaryListContainer as DiaryList } from "./container";

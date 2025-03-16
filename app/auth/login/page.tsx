@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 export default async function LoginPage() {
 	const session = await auth();
 
-	// すでにログインしている場合は日記一覧にリダイレクト
+	// すでにログインしている場合はダッシュボードにリダイレクト
 	if (session) {
-		redirect("/diary");
+		redirect("/dashboard");
 	}
 
 	return <LoginContainer />;

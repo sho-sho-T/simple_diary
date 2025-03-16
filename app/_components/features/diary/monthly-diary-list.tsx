@@ -2,7 +2,6 @@
 
 import { DiaryCard } from "@/app/_components/features/diary/diary-card";
 import { MonthSelector } from "@/app/_components/features/diary/month-selector";
-import { Pagination } from "@/app/_components/ui/pagination";
 import type { Tag } from "@/app/_types";
 import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { cn } from "@/lib/utils";
@@ -76,15 +75,6 @@ export function MonthlyDiaryList({
 						/>
 					))}
 				</div>
-			)}
-
-			{totalPages > 1 && (
-				<Pagination
-					currentPage={currentPage}
-					totalPages={totalPages}
-					onPageChange={onPageChange}
-					className="mt-8"
-				/>
 			)}
 		</div>
 	);
