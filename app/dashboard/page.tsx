@@ -1,16 +1,16 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { Dashboard } from "../_containers/dashboad";
+import { Dashboard } from "../_components/containers/dashboad";
 
 export default async function DashboardPage() {
-  const session = await auth();
+	const session = await auth();
 
-  // ログインしていない場合はログインページにリダイレクト
-  if (!session) {
-    redirect("/auth/login");
-  }
+	// ログインしていない場合はログインページにリダイレクト
+	if (!session) {
+		redirect("/auth/login");
+	}
 
-  const userName = session.user?.name || "ゲスト";
+	const userName = session.user?.name || "ゲスト";
 
-  return <Dashboard userName={userName} />;
-} 
+	return <Dashboard userName={userName} />;
+}

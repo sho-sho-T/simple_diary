@@ -1,4 +1,4 @@
-import { LoginContainer } from "@/app/_containers/auth/container";
+import { LoginContainer } from "@/app/_components/containers/auth/container";
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 

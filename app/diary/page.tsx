@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
-import { DiaryList } from "../_containers/diary/list";
+import { DiaryList } from "../_components/containers/diary/list";
 
 export default async function DiaryPage() {
 	const session = await auth();
