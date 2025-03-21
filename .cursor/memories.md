@@ -6,6 +6,7 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.1.1] Development: Reactのフォーム実装では、ボタンのtype属性が未指定の場合、フォーム内のボタンは自動的にtype="submit"として扱われる。特にEmotionSelectorやDatePickerなどの複合コンポーネントを使用する場合、明示的にtype="button"を指定しないと意図しないフォーム送信が発生する。また、useFormなどのライブラリからuseStateベースの実装に移行する際は、バリデーションロジックを再構築する必要があり、特にZodを用いた場合はエラー形式の変換処理が必要となる。テキストエリアでの文字数制限実装では、単純なmaxLength属性の利用が、複雑なJavaScriptによる制御よりもフォーカス維持の観点で信頼性が高い。 #form-handling #react #validation #best-practice
 [v1.1.0] Development: Prismaスキーマの変更時は、`prisma db pull`でデータベースの実際の状態を確認することが重要。"Already in sync"メッセージは必ずしもエラーではなく、期待する状態がすでに実現されている可能性を示唆する。また、スキーマ変更時は型定義(types)、バリデーション(validations)、サービス層(services)、UIコンポーネント(components)など、全レイヤーでの整合性を確保する必要がある。特に、StoryBookのモックデータは実際のデータ構造を反映させることで、UIの正確なテストが可能となる。 #database #schema #testing #best-practice
 
 [v1.0.9] Development: TailwindCSSの最新バージョンではPostCSSプラグインが@tailwindcss/postcssという別パッケージに移動しており、postcss.config.mjsでは配列形式["@tailwindcss/postcss"]で指定する必要がある。Storybookでのグローバルスタイル読み込み(.storybook/preview.ts)では、Next.jsの場合app/globals.cssのように正確なファイルパスを指定する必要がある。Webpackエラーの「Module not found」は単純なパス問題に見えても、実際は依存関係の構成問題である可能性があり、StackTraceを含めた分析が重要。 #tailwindcss #storybook #error-handling #css
