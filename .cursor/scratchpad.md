@@ -12,7 +12,7 @@
 
 ステータス: [Active]
 確信度: [95%]
-最終更新日: 2024-03-08
+最終更新日: 2024-06-04
 
 ## 日記アプリケーション実装計画
 
@@ -73,6 +73,22 @@
 - [ ] タグ選択・作成機能
 - [ ] 感情スタンプ選択機能
 - [ ] Zodバリデーション統合
+
+[ID-015] 日記一覧画面 Server Component 実装
+- [X] ディレクトリ構造の整理
+- [X] container.tsxをServer Componentに変更
+  - [X] "use client"ディレクティブの削除
+  - [X] React hooks（useState, useEffect等）の削除
+  - [X] サーバー側データフェッチの実装
+  - [X] エラーハンドリングの追加
+- [X] presentation.tsxのClient Component化
+  - [X] 状態管理（月選択、ページネーション）の実装
+  - [X] フィルタリングロジックの実装
+- [X] Server Actionsの実装
+  - [X] actions.tsファイルの作成
+  - [X] 将来的な拡張のための基本構造
+- [X] ページコンポーネントの改善
+  - [X] Suspenseを使用したローディング状態の表示
 
 ### Phase 3: 認証と権限管理
 [ID-008] Next Auth認証統合

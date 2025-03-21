@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import { DiaryList } from "../_components/containers/diary/list";
 
 export default async function DiaryPage() {
@@ -10,5 +11,20 @@ export default async function DiaryPage() {
 		redirect("/auth/login");
 	}
 
-	return <DiaryList userId={session.user.id} />;
+	return (
+		<Suspense
+			fallback={
+				<div className="container py-8">
+					<div className="flex items-center justify-center min-h-[200px]">
+						<div className="animate-spin h-6 w-6 border-2 border-primary border-t-transparent rounded-full" />
+						<span className="ml-2 text-muted-foreground">
+							データを読み込み中...
+						</span>
+					</div>
+				</div>
+			}
+		>
+			<DiaryList userId={session.user.id} />
+		</Suspense>
+	);
 }
