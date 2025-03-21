@@ -3,16 +3,15 @@
 import type { Tag } from "@/app/_types";
 import type { DiaryFormData, DiaryFormError } from "@/app/_types/diary/form";
 import { diaryFormSchema } from "@/app/_types/diary/validation";
+import { redirect } from "next/navigation";
 import { useId, useState } from "react";
 import { DiaryFormPresentation } from "./presentation";
 
 export const DiaryFormContainer = ({
 	initialData,
-	onSubmit,
 	isSubmitting = false,
 }: {
 	initialData?: DiaryFormData;
-	onSubmit?: (data: DiaryFormData) => Promise<void>;
 	isSubmitting?: boolean;
 }) => {
 	const formId = useId();
@@ -124,8 +123,7 @@ export const DiaryFormContainer = ({
 					return;
 				}
 
-				// 成功時のコールバック
-				await onSubmit?.(submissionData);
+				redirect("/diary");
 			} catch (error) {
 				console.error("Failed to save diary entry:", error);
 				setErrors({ _form: ["日記の保存に失敗しました"] });

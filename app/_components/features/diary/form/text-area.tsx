@@ -27,7 +27,7 @@ export const DiaryTextArea = ({
 		<Textarea
 			ref={textareaRef}
 			className={cn(
-				"min-h-[120px] resize-none",
+				"min-h-[240px] resize-none w-full p-4 text-base rounded-md focus:ring-2 focus:ring-offset-1",
 				error && "border-red-500 focus-visible:ring-red-500",
 				disabled && "opacity-50 cursor-not-allowed",
 			)}
