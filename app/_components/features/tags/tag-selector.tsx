@@ -71,9 +71,9 @@ export function TagSelector({
 			</div>
 
 			<ScrollArea className="w-full" style={{ maxHeight }}>
-				<div className="space-y-1 p-1">
+				<div className="flex flex-wrap gap-2 p-2">
 					{filteredTags.length === 0 ? (
-						<p className="text-center text-sm text-muted-foreground py-2">
+						<p className="text-center text-sm text-muted-foreground py-2 w-full">
 							タグがありません
 						</p>
 					) : (
@@ -82,7 +82,7 @@ export function TagSelector({
 								type="button"
 								key={tag.id}
 								className={cn(
-									"flex w-full cursor-pointer items-center justify-between rounded-md px-2 py-1.5 transition-colors",
+									"flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors",
 									selectedTagIds.has(tag.id)
 										? "bg-muted/60"
 										: "hover:bg-muted/40",
