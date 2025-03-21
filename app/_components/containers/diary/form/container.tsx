@@ -4,8 +4,9 @@ import { useTags } from "@/app/_hooks/use-tags";
 import type { Tag } from "@/app/_types";
 import type { DiaryFormData, DiaryFormError } from "@/app/_types/diary/form";
 import { diaryFormSchema } from "@/app/_types/diary/validation";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
+import { toast } from "sonner";
 import { DiaryFormPresentation } from "./presentation";
 
 export const DiaryFormContainer = ({
@@ -16,6 +17,7 @@ export const DiaryFormContainer = ({
 	isSubmitting?: boolean;
 }) => {
 	const formId = useId();
+	const router = useRouter();
 
 	// タグ一覧の取得
 	const { data: tags = [], isLoading: isTagsLoading } = useTags();
@@ -123,7 +125,7 @@ export const DiaryFormContainer = ({
 					},
 					body: JSON.stringify({
 						...submissionData,
-						tags: selectedTags.map((tag) => tag.id),
+						tagIds: selectedTags.map((tag) => tag.id),
 					}),
 				});
 
@@ -135,7 +137,8 @@ export const DiaryFormContainer = ({
 					return;
 				}
 
-				redirect("/diary");
+				toast.success("日記を保存しました");
+				router.push("/diary");
 			} catch (error) {
 				console.error("Failed to save diary entry:", error);
 				setErrors({ _form: ["日記の保存に失敗しました"] });
