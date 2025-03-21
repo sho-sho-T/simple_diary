@@ -19,7 +19,7 @@ export function TagList({ tags, className, onTagClick, limit }: TagListProps) {
 	const hasMore = limit && tags.length > limit;
 
 	return (
-		<div className={cn("flex flex-wrap gap-1.5", className)}>
+		<div className={cn("flex flex-wrap gap-1", className)}>
 			{displayTags.map((tag) => (
 				<TagBadge
 					key={tag.id}

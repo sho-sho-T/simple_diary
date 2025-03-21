@@ -26,6 +26,7 @@ type DiaryFormPresentationProps = {
 	onDateSelect: (date: Date | undefined) => void;
 	onEmotionSelect: (emotionId: number) => void;
 	onTagSelect: (tagId: string) => void;
+	onTagCreated?: (tag: Tag) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 	isSubmitting: boolean;
 	allTags?: Tag[]; // タグリスト（実際の実装ではAPIから取得など）
@@ -42,6 +43,7 @@ export const DiaryFormPresentation = ({
 	onDateSelect,
 	onEmotionSelect,
 	onTagSelect,
+	onTagCreated,
 	onSubmit,
 	isSubmitting,
 	allTags = [], // 仮の空配列（実際の実装では適切に初期化）
@@ -112,6 +114,7 @@ export const DiaryFormPresentation = ({
 					allTags={allTags}
 					selectedTags={selectedTags}
 					onTagSelect={onTagSelect}
+					onTagCreated={onTagCreated}
 					maxHeight={150}
 				/>
 			</div>

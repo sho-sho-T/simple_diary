@@ -6,6 +6,7 @@
 # Project Memories (AI & User) 🧠
 
 ### Memories（編集可）
+[v1.1.2] Development: Reactアプリケーションでは、HTML仕様上フォーム要素の中に別のフォーム要素をネストできないという制約がある。特にモーダルやダイアログ内でフォームを実装する場合、親コンポーネントにもフォームが存在すると予期せぬsubmitイベントが発生することがある。この問題を解決するには：(1)内側のフォーム要素を`<div>`等に置き換えて送信処理を手動実装する、(2)全てのボタンに`type="button"`を明示指定する、(3)Enterキー対応など標準フォーム動作は`onKeyDown`等で再実装する、の3つのアプローチが効果的である。また、React Queryのようなグローバル状態管理ツールは、Next.jsのApp Routerではrootレイアウトにプロバイダーを配置するのがベストプラクティスとなる。 #react #form-handling #modal #best-practice #react-query
 [v1.1.1] Development: Reactのフォーム実装では、ボタンのtype属性が未指定の場合、フォーム内のボタンは自動的にtype="submit"として扱われる。特にEmotionSelectorやDatePickerなどの複合コンポーネントを使用する場合、明示的にtype="button"を指定しないと意図しないフォーム送信が発生する。また、useFormなどのライブラリからuseStateベースの実装に移行する際は、バリデーションロジックを再構築する必要があり、特にZodを用いた場合はエラー形式の変換処理が必要となる。テキストエリアでの文字数制限実装では、単純なmaxLength属性の利用が、複雑なJavaScriptによる制御よりもフォーカス維持の観点で信頼性が高い。 #form-handling #react #validation #best-practice
 [v1.1.0] Development: Prismaスキーマの変更時は、`prisma db pull`でデータベースの実際の状態を確認することが重要。"Already in sync"メッセージは必ずしもエラーではなく、期待する状態がすでに実現されている可能性を示唆する。また、スキーマ変更時は型定義(types)、バリデーション(validations)、サービス層(services)、UIコンポーネント(components)など、全レイヤーでの整合性を確保する必要がある。特に、StoryBookのモックデータは実際のデータ構造を反映させることで、UIの正確なテストが可能となる。 #database #schema #testing #best-practice
 

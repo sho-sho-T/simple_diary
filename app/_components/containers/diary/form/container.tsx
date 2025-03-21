@@ -1,5 +1,6 @@
 "use client";
 
+import { useTags } from "@/app/_hooks/use-tags";
 import type { Tag } from "@/app/_types";
 import type { DiaryFormData, DiaryFormError } from "@/app/_types/diary/form";
 import { diaryFormSchema } from "@/app/_types/diary/validation";
@@ -15,6 +16,9 @@ export const DiaryFormContainer = ({
 	isSubmitting?: boolean;
 }) => {
 	const formId = useId();
+
+	// タグ一覧の取得
+	const { data: tags = [], isLoading: isTagsLoading } = useTags();
 
 	// フォームの状態管理
 	const [content, setContent] = useState(initialData?.content || "");
@@ -41,10 +45,18 @@ export const DiaryFormContainer = ({
 				return prevTags.filter((tag) => tag.id !== tagId);
 			}
 
-			// タグを追加 (実際の実装ではallTagsから対応するタグを見つける必要があります)
-			const newTag = { id: tagId, userId: "", name: "", color: "" };
-			return [...prevTags, newTag];
+			// タグを追加（タグ一覧から対応するタグを取得）
+			const tagToAdd = tags.find((tag) => tag.id === tagId);
+			if (!tagToAdd) return prevTags;
+
+			return [...prevTags, tagToAdd];
 		});
+	};
+
+	// 新しいタグが作成された時の処理
+	const handleTagCreated = (newTag: Tag) => {
+		// 新しく作成されたタグを自動的に選択する場合は以下を実装
+		// setSelectedTags((prevTags) => [...prevTags, newTag]);
 	};
 
 	// 感情スタンプ選択ハンドラー
@@ -134,13 +146,6 @@ export const DiaryFormContainer = ({
 		}
 	};
 
-	// 仮のタグリスト (実際の実装ではAPIから取得など)
-	const dummyTags: Tag[] = [
-		{ id: "1", userId: "", name: "仕事", color: "#ff0000" },
-		{ id: "2", userId: "", name: "プライベート", color: "#00ff00" },
-		{ id: "3", userId: "", name: "勉強", color: "#0000ff" },
-	];
-
 	return (
 		<DiaryFormPresentation
 			formId={formId}
@@ -153,9 +158,10 @@ export const DiaryFormContainer = ({
 			onDateSelect={handleDateSelect}
 			onEmotionSelect={handleEmotionSelect}
 			onTagSelect={handleTagSelect}
+			onTagCreated={handleTagCreated}
 			onSubmit={handleSubmit}
-			isSubmitting={isSubmitting}
-			allTags={dummyTags} // 実際の実装ではAPIから取得したタグリスト
+			isSubmitting={isSubmitting || isTagsLoading}
+			allTags={tags}
 		/>
 	);
 };
