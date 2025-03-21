@@ -76,14 +76,6 @@ export function TagCreateModal({
 		onOpenChange(open);
 	};
 
-	// Enterキーの処理
-	const handleKeyDown = (e: React.KeyboardEvent) => {
-		if (e.key === "Enter" && !e.shiftKey) {
-			e.preventDefault(); // デフォルトのフォーム送信を防止
-			handleSubmit();
-		}
-	};
-
 	return (
 		<Dialog open={open} onOpenChange={handleOpenChange}>
 			<DialogContent className="sm:max-w-md">
@@ -103,7 +95,6 @@ export function TagCreateModal({
 								onChange={(e) => setName(e.target.value)}
 								placeholder="タグ名を入力"
 								maxLength={50}
-								onKeyDown={handleKeyDown}
 							/>
 						</div>
 
@@ -122,7 +113,6 @@ export function TagCreateModal({
 										onChange={(e) => setColor(e.target.value)}
 										className="w-24 font-mono"
 										pattern="^#[0-9A-Fa-f]{6}$"
-										onKeyDown={handleKeyDown}
 									/>
 								</div>
 							</div>
