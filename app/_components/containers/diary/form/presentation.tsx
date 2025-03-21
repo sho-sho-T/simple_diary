@@ -3,51 +3,58 @@
 import { CharacterCounter } from "@/app/_components/features/diary/form/character-counter";
 import { DatePicker } from "@/app/_components/features/diary/form/date-picker";
 import { DiaryTextArea } from "@/app/_components/features/diary/form/text-area";
+import { EmotionSelector } from "@/app/_components/features/emotions/emotion-selector";
+import { TagSelector } from "@/app/_components/features/tags/tag-selector";
 import { Button } from "@/app/_components/ui/button";
-import type { SelectSingleEventHandler } from "react-day-picker";
+import type { Tag } from "@/app/_types";
 
 type DiaryFormPresentationProps = {
 	formId: string;
-	fields: {
-		content: {
-			value?: string;
-			errors?: string[];
-		};
-		entryDate: {
-			value?: string;
-			errors?: string[];
-		};
+	content: string;
+	selectedDate?: Date;
+	selectedEmotionId?: number;
+	selectedTags: Tag[];
+	errors: {
+		content?: string[];
+		entryDate?: string[];
+		_form?: string[];
 	};
-	formErrors?: string[];
+	onContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+	onDateSelect: (date: Date | undefined) => void;
+	onEmotionSelect: (emotionId: number) => void;
+	onTagSelect: (tagId: string) => void;
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-	onDateSelect: SelectSingleEventHandler;
 	isSubmitting: boolean;
+	allTags?: Tag[]; // タグリスト（実際の実装ではAPIから取得など）
 };
 
 export const DiaryFormPresentation = ({
 	formId,
-	fields,
-	formErrors,
-	onSubmit,
+	content,
+	selectedDate,
+	selectedEmotionId,
+	selectedTags,
+	errors,
+	onContentChange,
 	onDateSelect,
+	onEmotionSelect,
+	onTagSelect,
+	onSubmit,
 	isSubmitting,
+	allTags = [], // 仮の空配列（実際の実装では適切に初期化）
 }: DiaryFormPresentationProps) => {
 	return (
 		<form id={formId} className="space-y-4" onSubmit={onSubmit} noValidate>
 			<div className="space-y-2">
 				<DatePicker
-					selected={
-						fields.entryDate.value
-							? new Date(fields.entryDate.value)
-							: undefined
-					}
+					selected={selectedDate}
 					onSelect={onDateSelect}
-					error={fields.entryDate.errors?.join(", ")}
+					error={errors.entryDate?.join(", ")}
 					disabled={isSubmitting}
 				/>
-				{fields.entryDate.errors && fields.entryDate.errors.length > 0 && (
+				{errors.entryDate && errors.entryDate.length > 0 && (
 					<p className="text-sm text-red-500" role="alert">
-						{fields.entryDate.errors.join(", ")}
+						{errors.entryDate.join(", ")}
 					</p>
 				)}
 			</div>
@@ -55,29 +62,46 @@ export const DiaryFormPresentation = ({
 			<div className="space-y-2">
 				<DiaryTextArea
 					name="content"
-					value={fields.content.value}
+					value={content}
+					onChange={onContentChange}
 					maxLength={2000}
-					currentLength={fields.content.value?.length || 0}
-					error={fields.content.errors?.join(", ")}
+					currentLength={content.length}
+					error={errors.content?.join(", ")}
 					disabled={isSubmitting}
 					placeholder="今日の出来事を書いてみましょう"
 				/>
 				<div className="flex justify-between items-center">
-					<CharacterCounter
-						current={fields.content.value?.length || 0}
-						max={2000}
-					/>
-					{fields.content.errors && fields.content.errors.length > 0 && (
+					<CharacterCounter current={content.length} max={2000} />
+					{errors.content && errors.content.length > 0 && (
 						<p className="text-sm text-red-500" role="alert">
-							{fields.content.errors.join(", ")}
+							{errors.content.join(", ")}
 						</p>
 					)}
 				</div>
 			</div>
 
-			{formErrors && formErrors.length > 0 && (
+			<div className="space-y-2">
+				<h3 className="text-sm font-medium">気分</h3>
+				<EmotionSelector
+					selectedEmotionId={selectedEmotionId}
+					onSelect={onEmotionSelect}
+					className="mb-2"
+				/>
+			</div>
+
+			<div className="space-y-2">
+				<h3 className="text-sm font-medium">タグ</h3>
+				<TagSelector
+					allTags={allTags}
+					selectedTags={selectedTags}
+					onTagSelect={onTagSelect}
+					maxHeight={150}
+				/>
+			</div>
+
+			{errors._form && errors._form.length > 0 && (
 				<p className="text-sm text-red-500" role="alert">
-					{formErrors.join(", ")}
+					{errors._form.join(", ")}
 				</p>
 			)}
 

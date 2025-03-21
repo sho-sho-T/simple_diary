@@ -1,14 +1,14 @@
+import type { Tag } from "@/app/_types";
 import type { z } from "zod";
 import type { diaryFormSchema } from "./validation";
 
 /**
  * 日記フォームのデータ型
  */
-export type DiaryFormData = z.infer<typeof diaryFormSchema>;
-
-/**
- * 日記フォームのProps型
- */
+export type DiaryFormData = z.infer<typeof diaryFormSchema> & {
+	emotionStampId?: number;
+	tags?: Tag[];
+};
 
 /**
  * 日記フォームのProps型
@@ -28,6 +28,7 @@ export type DiaryFormProps = {
 export type DiaryFormError = {
 	content?: string[];
 	entryDate?: string[];
+	_form?: string[];
 };
 
 /**
@@ -63,7 +64,7 @@ export type DatePickerProps = {
 	/** 選択された日付 */
 	selected?: Date;
 	/** 日付が変更された時のコールバック */
-	onSelect?: (date: Date) => void;
+	onSelect?: (date: Date | undefined) => void;
 	/** エラーメッセージ */
 	error?: string;
 	/** 無効化されているかどうか */
