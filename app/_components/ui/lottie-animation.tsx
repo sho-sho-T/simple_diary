@@ -21,16 +21,26 @@ export function LottieAnimation({
 	height = 40,
 }: LottieAnimationProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
+	const animationRef = useRef<AnimationItem | null>(null);
 
 	useEffect(() => {
-		let animation: AnimationItem | undefined;
+		// すでにアニメーションが存在する場合は破棄
+		if (animationRef.current) {
+			animationRef.current.destroy();
+			animationRef.current = null;
+		}
 
 		// 動的にlottie-webをインポート
 		import("lottie-web").then((lottieModule) => {
 			const lottie = lottieModule.default;
 			if (!containerRef.current) return;
 
-			animation = lottie.loadAnimation({
+			// 念のため再度チェック（非同期処理中にアンマウントされる可能性）
+			if (animationRef.current) {
+				animationRef.current.destroy();
+			}
+
+			animationRef.current = lottie.loadAnimation({
 				container: containerRef.current,
 				renderer: "svg",
 				loop,
@@ -40,8 +50,9 @@ export function LottieAnimation({
 		});
 
 		return () => {
-			if (animation) {
-				animation.destroy();
+			if (animationRef.current) {
+				animationRef.current.destroy();
+				animationRef.current = null;
 			}
 		};
 	}, [animationPath, loop, autoplay]);
