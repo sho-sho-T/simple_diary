@@ -51,13 +51,15 @@ export function MonthlyDiaryList({
 
 	return (
 		<div className={cn("space-y-6", className)}>
-			<div className="flex justify-between items-center">
+			<div className="flex flex-col items-center">
 				<h2 className="text-2xl font-bold">日記一覧</h2>
-				<MonthNavigation
-					availableMonths={availableMonths}
-					selectedMonth={selectedMonth}
-					onMonthChange={onMonthChange}
-				/>
+				<div className="mt-4">
+					<MonthNavigation
+						availableMonths={availableMonths}
+						selectedMonth={selectedMonth}
+						onMonthChange={onMonthChange}
+					/>
+				</div>
 			</div>
 
 			{entries.length === 0 ? (
@@ -65,7 +67,7 @@ export function MonthlyDiaryList({
 					<p className="text-muted-foreground">この月の日記はありません</p>
 				</div>
 			) : (
-				<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+				<div className="flex flex-col items-center gap-4 max-w-xl mx-auto">
 					{entries.map((entry) => (
 						<DiaryCard
 							key={entry.id}
@@ -75,6 +77,7 @@ export function MonthlyDiaryList({
 							onCardClick={
 								onEntryClick ? () => onEntryClick(entry.id) : undefined
 							}
+							className="w-full"
 						/>
 					))}
 				</div>
