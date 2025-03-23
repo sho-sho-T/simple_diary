@@ -5,6 +5,7 @@ import {
 	Sheet,
 	SheetClose,
 	SheetContent,
+	SheetTitle,
 	SheetTrigger,
 } from "@/app/_components/ui/sheet";
 import { cn } from "@/lib/utils";
@@ -30,6 +31,7 @@ export function MobileMenu() {
 				</Button>
 			</SheetTrigger>
 			<SheetContent side="right" className="pr-0">
+				<SheetTitle className="sr-only">メインメニュー</SheetTitle>
 				<div className="flex flex-col gap-4 py-4">
 					{items.map((item) => {
 						const isActive =
