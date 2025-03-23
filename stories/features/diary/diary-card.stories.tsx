@@ -1,5 +1,6 @@
 import { DiaryCard } from "@/app/_components/features/diary/diary-card";
-import type { DiaryEntry, Tag } from "@/app/_types";
+import type { Tag } from "@/app/_types";
+import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import type { Meta, StoryObj } from "@storybook/react";
 
 // モックデータ
@@ -9,32 +10,28 @@ const mockTags: Tag[] = [
 		userId: "user1",
 		name: "仕事",
 		color: "#4f46e5",
-		createdAt: new Date(),
 	},
 	{
 		id: "2",
 		userId: "user1",
 		name: "家族",
 		color: "#16a34a",
-		createdAt: new Date(),
 	},
 	{
 		id: "3",
 		userId: "user1",
 		name: "趣味",
 		color: "#ea580c",
-		createdAt: new Date(),
 	},
 	{
 		id: "4",
 		userId: "user1",
 		name: "旅行",
 		color: "#0ea5e9",
-		createdAt: new Date(),
 	},
 ];
 
-const mockEntry: DiaryEntry = {
+const mockEntry: DiaryEntryWithTags = {
 	id: "entry1",
 	userId: "user1",
 	entryDate: new Date("2024-03-08"),
@@ -43,6 +40,7 @@ const mockEntry: DiaryEntry = {
 	emotionStampId: 1,
 	createdAt: new Date("2024-03-08T09:00:00"),
 	updatedAt: new Date("2024-03-08T09:00:00"),
+	tags: [],
 };
 
 const meta = {
@@ -94,7 +92,7 @@ export const WithManyTags: Story = {
 // 感情スタンプなしの日記カード
 export const WithoutEmotionStamp: Story = {
 	args: {
-		entry: { ...mockEntry, emotionStampId: undefined },
+		entry: { ...mockEntry, emotionStampId: null },
 		tags: mockTags.slice(0, 2),
 	},
 };

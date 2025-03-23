@@ -9,35 +9,30 @@ const mockTags: Tag[] = [
 		userId: "user1",
 		name: "仕事",
 		color: "#4f46e5",
-		createdAt: new Date(),
 	},
 	{
 		id: "2",
 		userId: "user1",
 		name: "家族",
 		color: "#16a34a",
-		createdAt: new Date(),
 	},
 	{
 		id: "3",
 		userId: "user1",
 		name: "趣味",
 		color: "#ea580c",
-		createdAt: new Date(),
 	},
 	{
 		id: "4",
 		userId: "user1",
 		name: "旅行",
 		color: "#0ea5e9",
-		createdAt: new Date(),
 	},
 	{
 		id: "5",
 		userId: "user1",
 		name: "健康",
 		color: "#dc2626",
-		createdAt: new Date(),
 	},
 ];
 
@@ -96,7 +91,6 @@ export const LongText: Story = {
 			userId: "user1",
 			name: "とても長いタグ名のサンプルです",
 			color: "#8b5cf6",
-			createdAt: new Date(),
 		},
 	},
 };
