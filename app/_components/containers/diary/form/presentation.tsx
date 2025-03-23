@@ -30,6 +30,7 @@ type DiaryFormPresentationProps = {
 	onSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
 	isSubmitting: boolean;
 	allTags?: Tag[]; // タグリスト（実際の実装ではAPIから取得など）
+	isEditMode?: boolean; // 編集モードかどうか
 };
 
 export const DiaryFormPresentation = ({
@@ -47,6 +48,7 @@ export const DiaryFormPresentation = ({
 	onSubmit,
 	isSubmitting,
 	allTags = [], // 仮の空配列（実際の実装では適切に初期化）
+	isEditMode = false, // デフォルトは新規作成モード
 }: DiaryFormPresentationProps) => {
 	return (
 		<form
@@ -57,14 +59,16 @@ export const DiaryFormPresentation = ({
 		>
 			{/* ヘッダー: タイトルと日付選択 */}
 			<div className="flex justify-between items-center mb-6">
-				<h1 className="text-2xl font-bold">日記を書く</h1>
+				<h1 className="text-2xl font-bold">
+					{isEditMode ? "日記を編集" : "日記を書く"}
+				</h1>
 				<div className="flex items-center space-x-2">
 					<Calendar className="h-5 w-5 text-gray-500" />
 					<DatePicker
 						selected={selectedDate}
 						onSelect={onDateSelect}
 						error={errors.entryDate?.join(", ")}
-						disabled={isSubmitting}
+						disabled={isSubmitting || isEditMode} // 編集モードでは日付の変更を無効化
 					/>
 				</div>
 			</div>
@@ -133,7 +137,7 @@ export const DiaryFormPresentation = ({
 					className="px-8 py-2 rounded-md"
 					disabled={isSubmitting}
 				>
-					{isSubmitting ? "保存中..." : "保存する"}
+					{isSubmitting ? "保存中..." : isEditMode ? "更新する" : "保存する"}
 				</Button>
 			</div>
 		</form>

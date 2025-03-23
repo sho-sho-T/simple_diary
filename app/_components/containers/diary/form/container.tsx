@@ -19,6 +19,9 @@ export const DiaryFormContainer = ({
 	const formId = useId();
 	const router = useRouter();
 
+	// 編集モードかどうかの判定（初期データの有無で判断）
+	const isEditMode = !!initialData?.entryDate;
+
 	// タグ一覧の取得
 	const { data: tags = [], isLoading: isTagsLoading } = useTags();
 
@@ -116,10 +119,16 @@ export const DiaryFormContainer = ({
 				tags: selectedTags,
 			};
 
-			// APIリクエスト;
+			// APIリクエスト
 			try {
-				const response = await fetch("/api/diary", {
-					method: "POST",
+				// 編集モードと新規作成モードでエンドポイントと方法を変える
+				const url = isEditMode
+					? `/api/diary/${getEntryIdFromDate(initialData.entryDate)}`
+					: "/api/diary";
+				const method = isEditMode ? "PUT" : "POST";
+
+				const response = await fetch(url, {
+					method,
 					headers: {
 						"Content-Type": "application/json",
 					},
@@ -137,7 +146,7 @@ export const DiaryFormContainer = ({
 					return;
 				}
 
-				toast.success("日記を保存しました");
+				toast.success(isEditMode ? "日記を更新しました" : "日記を保存しました");
 				router.push("/diary");
 			} catch (error) {
 				console.error("Failed to save diary entry:", error);
@@ -147,6 +156,23 @@ export const DiaryFormContainer = ({
 			console.error("Validation error:", error);
 			setErrors({ _form: ["入力内容に問題があります"] });
 		}
+	};
+
+	// 日付からエントリーIDを取得する補助関数
+	const getEntryIdFromDate = (date: Date): string => {
+		// URLからIDを取得（/diary/[id]/edit の形式を想定）
+		const path = window.location.pathname;
+		const match = path.match(/\/diary\/([^/]+)\/edit/);
+
+		if (match?.[1]) {
+			return match[1];
+		}
+
+		// IDが取得できない場合は新規作成扱い
+		console.warn(
+			"編集モードですが、IDが特定できません。新規作成として処理します。",
+		);
+		return "";
 	};
 
 	return (
@@ -165,6 +191,7 @@ export const DiaryFormContainer = ({
 			onSubmit={handleSubmit}
 			isSubmitting={isSubmitting || isTagsLoading}
 			allTags={tags}
+			isEditMode={isEditMode}
 		/>
 	);
 };
