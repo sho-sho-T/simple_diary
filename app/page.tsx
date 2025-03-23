@@ -1,16 +1,16 @@
-import { redirect } from "next/navigation";
 import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
 export default async function Home() {
-  const session = await auth();
+	const session = await auth();
 
-  // ログインしているかどうかに応じてリダイレクト
-  if (session) {
-    redirect("/dashboard");
-  } else {
-    redirect("/auth/login");
-  }
+	// ログインしているかどうかに応じてリダイレクト
+	if (session) {
+		redirect("/diary");
+	} else {
+		redirect("/auth/login");
+	}
 
-  // 通常は以下のコードは実行されない
-  return null;
+	// 通常は以下のコードは実行されない
+	return null;
 }

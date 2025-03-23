@@ -13,10 +13,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const items = [
-	{ title: "ホーム", href: "/" },
 	{ title: "日記", href: "/diary" },
-	{ title: "カレンダー", href: "/calendar" },
-	{ title: "タグ", href: "/tags" },
+	{ title: "タグ", href: "/tag" },
 ];
 
 export function MobileMenu() {

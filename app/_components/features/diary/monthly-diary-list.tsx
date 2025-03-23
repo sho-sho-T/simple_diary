@@ -52,7 +52,6 @@ export function MonthlyDiaryList({
 	return (
 		<div className={cn("space-y-6", className)}>
 			<div className="flex flex-col items-center">
-				<h2 className="text-2xl font-bold">日記一覧</h2>
 				<div className="mt-4">
 					<MonthNavigation
 						availableMonths={availableMonths}

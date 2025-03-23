@@ -1,4 +1,5 @@
 import { DiaryForm } from "@/app/_components/containers/diary/form";
+import { Header } from "@/app/_layouts/header";
 import type { DiaryFormData } from "@/app/_types/diary/form";
 import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { getDiaryEntryById } from "@/app/api/diary/_lib/diary-service";
@@ -37,10 +38,13 @@ export default async function DiaryEditPage({
 		};
 
 		return (
-			<div className="container mx-auto py-6 max-w-4xl relative">
-				<DiaryForm initialData={initialData} />
-				<DeleteButton entryId={id} />
-			</div>
+			<>
+				<Header />
+				<div className="container mx-auto py-6 max-w-4xl relative">
+					<DiaryForm initialData={initialData} />
+					<DeleteButton entryId={id} />
+				</div>
+			</>
 		);
 	} catch (error) {
 		// 認証エラーの場合はログインページにリダイレクト

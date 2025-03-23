@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { DiaryList } from "../_components/containers/diary/list";
+import { Header } from "../_layouts/header";
 
 export default async function DiaryPage() {
 	const session = await auth();
@@ -24,6 +25,7 @@ export default async function DiaryPage() {
 				</div>
 			}
 		>
+			<Header />
 			<DiaryList userId={session.user.id} />
 		</Suspense>
 	);
