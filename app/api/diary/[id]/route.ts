@@ -18,9 +18,12 @@ import {
  */
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -30,7 +33,7 @@ export async function GET(
 		}
 
 		// データ取得
-		const entry = await getDiaryEntryById(authResult.userId, params.id);
+		const entry = await getDiaryEntryById(authResult.userId, id);
 
 		// エントリーが見つからない場合
 		if (!entry) {
@@ -50,9 +53,12 @@ export async function GET(
  */
 export async function PUT(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -69,11 +75,7 @@ export async function PUT(
 
 		// 日記エントリー更新
 		try {
-			const updatedEntry = await updateDiaryEntry(
-				authResult.userId,
-				params.id,
-				data,
-			);
+			const updatedEntry = await updateDiaryEntry(authResult.userId, id, data);
 			return createSuccessResponse(updatedEntry);
 		} catch (error) {
 			// エントリーが存在しない場合
@@ -107,9 +109,12 @@ export async function PUT(
  */
 export async function DELETE(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -120,7 +125,7 @@ export async function DELETE(
 
 		// 日記エントリー削除
 		try {
-			await deleteDiaryEntry(authResult.userId, params.id);
+			await deleteDiaryEntry(authResult.userId, id);
 			return createSuccessResponse({
 				message: "日記エントリーが削除されました",
 			});

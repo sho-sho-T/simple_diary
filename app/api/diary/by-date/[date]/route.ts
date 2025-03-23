@@ -14,9 +14,12 @@ import { ZodError } from "zod";
  */
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { date: string } },
+	{ params }: { params: Promise<{ date: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { date } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -26,11 +29,11 @@ export async function GET(
 		}
 
 		// 日付パラメータのバリデーション
-		const validatedDate = dateSchema.parse(params.date);
-		const date = new Date(validatedDate);
+		const validatedDate = dateSchema.parse(date);
+		const dateObj = new Date(validatedDate);
 
 		// データ取得
-		const entry = await getDiaryEntryByDate(authResult.userId, date);
+		const entry = await getDiaryEntryByDate(authResult.userId, dateObj);
 
 		// エントリーが見つからない場合
 		if (!entry) {

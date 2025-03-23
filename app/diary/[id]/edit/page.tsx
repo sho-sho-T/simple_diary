@@ -13,9 +13,9 @@ import { DeleteButton } from "./delete-button";
 export default async function DiaryEditPage({
 	params,
 }: {
-	params: { id: string };
+	params: Promise<{ id: string }>;
 }) {
-	const { id } = params;
+	const { id } = await params;
 
 	try {
 		// 認証情報からユーザーIDを取得

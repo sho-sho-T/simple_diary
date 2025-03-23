@@ -14,9 +14,12 @@ import { deleteTag, getTagById, updateTag } from "../_lib/tag-service";
  */
 export async function GET(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -26,7 +29,7 @@ export async function GET(
 		}
 
 		// タグ取得
-		const tag = await getTagById(authResult.userId, params.id);
+		const tag = await getTagById(authResult.userId, id);
 
 		// タグが見つからない場合
 		if (!tag) {
@@ -46,9 +49,12 @@ export async function GET(
  */
 export async function PUT(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -65,7 +71,7 @@ export async function PUT(
 
 		// タグ更新
 		try {
-			const updatedTag = await updateTag(authResult.userId, params.id, data);
+			const updatedTag = await updateTag(authResult.userId, id, data);
 			return createSuccessResponse(updatedTag);
 		} catch (error) {
 			// タグが存在しない場合
@@ -104,9 +110,12 @@ export async function PUT(
  */
 export async function DELETE(
 	req: NextRequest,
-	{ params }: { params: { id: string } },
+	{ params }: { params: Promise<{ id: string }> },
 ) {
 	try {
+		// パラメータを取得
+		const { id } = await params;
+
 		// 認証チェック
 		const authResult = await checkApiAuth(req);
 
@@ -117,7 +126,7 @@ export async function DELETE(
 
 		// タグ削除
 		try {
-			await deleteTag(authResult.userId, params.id);
+			await deleteTag(authResult.userId, id);
 			return createSuccessResponse({ message: "タグが削除されました" });
 		} catch (error) {
 			// タグが存在しない場合
