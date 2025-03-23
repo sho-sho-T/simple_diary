@@ -14,12 +14,14 @@ export default async function DiaryEditPage({
 }: {
 	params: { id: string };
 }) {
+	const { id } = params;
+
 	try {
 		// 認証情報からユーザーIDを取得
 		const userId = await getCurrentUserId();
 
 		// サービス関数を直接呼び出して日記エントリーを取得
-		const entry = await getDiaryEntryById(userId, params.id);
+		const entry = await getDiaryEntryById(userId, id);
 
 		// 存在しない場合は404
 		if (!entry) {
@@ -37,7 +39,7 @@ export default async function DiaryEditPage({
 		return (
 			<div className="container mx-auto py-6 max-w-4xl relative">
 				<DiaryForm initialData={initialData} />
-				<DeleteButton entryId={params.id} />
+				<DeleteButton entryId={id} />
 			</div>
 		);
 	} catch (error) {
