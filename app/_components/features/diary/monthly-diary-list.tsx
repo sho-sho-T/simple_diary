@@ -1,10 +1,13 @@
 "use client";
 
 import { DiaryCard } from "@/app/_components/features/diary/diary-card";
-import { MonthSelector } from "@/app/_components/features/diary/month-selector";
+import { MonthNavigation } from "@/app/_components/features/diary/month-navigation";
+import { FloatingActionButton } from "@/app/_components/ui/floating-action-button";
 import type { Tag } from "@/app/_types";
 import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { cn } from "@/lib/utils";
+import { Plus } from "lucide-react";
+import Link from "next/link";
 import * as React from "react";
 
 interface MonthlyDiaryListProps {
@@ -50,7 +53,7 @@ export function MonthlyDiaryList({
 		<div className={cn("space-y-6", className)}>
 			<div className="flex justify-between items-center">
 				<h2 className="text-2xl font-bold">日記一覧</h2>
-				<MonthSelector
+				<MonthNavigation
 					availableMonths={availableMonths}
 					selectedMonth={selectedMonth}
 					onMonthChange={onMonthChange}
@@ -76,6 +79,13 @@ export function MonthlyDiaryList({
 					))}
 				</div>
 			)}
+
+			{/* 日記追加ボタン */}
+			<Link href="/diary/create" aria-label="日記を作成">
+				<FloatingActionButton aria-label="日記を作成">
+					<Plus className="h-6 w-6" />
+				</FloatingActionButton>
+			</Link>
 		</div>
 	);
 }

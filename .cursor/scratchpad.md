@@ -418,3 +418,66 @@ components/
 4. **@conformの学習曲線**
    - 公式ドキュメントとサンプルコードを参照
    - 小さなコンポーネントから段階的に実装
+
+ステータス: [Active]
+確信度: [95%]
+最終更新日: 2024-06-05
+
+## 日記一覧画面UI改善タスク
+
+[ID-016] 日記一覧画面のUI改善
+ステータス: [-] 優先度: [High]
+依存関係: なし
+進捗ノート:
+- 2024-06-05 要件分析とタスク計画を作成
+- 2024-06-05 コンポーネント実装完了
+
+### タスク詳細
+
+1. 月ナビゲーションコンポーネントの作成
+   - [X] 既存の`MonthSelector`コンポーネントの分析
+   - [X] 新しい`MonthNavigation`コンポーネントの実装
+     - [X] 前月・次月ボタンの追加
+     - [X] 中央に年月表示
+     - [X] クリック時の月変更機能の実装
+
+2. 日記追加ボタンの実装
+   - [X] 位置固定のボタンコンポーネント実装
+   - [X] `/diary/create`へのリンク設定
+   - [X] スクロール時に位置が変わらない実装
+   - [X] モバイル対応デザイン
+
+### 実装計画
+
+#### 1. MonthNavigationコンポーネント
+- [X] 場所: `app/_components/features/diary/month-navigation.tsx`
+- [X] タイプ: Clientコンポーネント
+- [X] 機能:
+  - [X] 前月/次月への移動ボタン
+  - [X] 年月の表示（format関数使用）
+  - [X] ユーザーが月を変更できる機能
+
+#### 2. 日記追加ボタン（FloatingActionButton）
+- [X] 場所: `app/_components/ui/floating-action-button.tsx`（汎用コンポーネント）
+- [X] 実装:
+  - [X] 右下に固定
+  - [X] スクロールに影響されない位置固定
+  - [X] モバイル対応
+
+#### 3. 既存コードの変更
+- [X] 場所: `app/_components/features/diary/monthly-diary-list.tsx`
+- [X] 変更内容:
+  - [X] `MonthSelector`を`MonthNavigation`に置き換え
+  - [X] FloatingActionButtonの追加
+
+### 技術的な考慮事項
+- [X] MonthNavigationはdate-fnsを使用して日付操作
+- [X] 前月/次月ボタンはLucideアイコンを使用
+- [X] 位置固定ボタンはTailwind CSSのfixed positioningを使用
+- [X] アクセシビリティを考慮した実装（適切なaria属性）
+
+### 動作確認
+- [ ] 前月・次月ボタンの動作確認
+- [ ] 日付変更機能の確認
+- [ ] 日記追加ボタンのクリック時に日記作成画面に遷移することを確認
+- [ ] レスポンシブデザインの確認（モバイル・デスクトップ）
