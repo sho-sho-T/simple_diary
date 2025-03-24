@@ -1,6 +1,7 @@
 "use client";
 
 import { MonthlyDiaryList } from "@/app/_components/features/diary/monthly-diary-list";
+import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
 import type { Tag } from "@/app/_types";
 import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { useRouter } from "next/navigation";
@@ -24,6 +25,7 @@ export function DiaryListPresentation({
 	initialMonth = new Date(),
 }: DiaryListPresentationProps) {
 	const router = useRouter();
+	const { navigateWithLoading } = useLoadingNavigation();
 	const [selectedMonth, setSelectedMonth] = useState(initialMonth);
 	const [currentPage, setCurrentPage] = useState(1);
 
@@ -66,7 +68,7 @@ export function DiaryListPresentation({
 
 	// 日記エントリーをクリックしたときの処理
 	const handleEntryClick = (entryId: string) => {
-		router.push(`/diary/${entryId}/edit`);
+		navigateWithLoading(`/diary/${entryId}/edit`);
 	};
 
 	return (

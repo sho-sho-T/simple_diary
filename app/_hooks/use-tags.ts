@@ -1,12 +1,16 @@
 import type { Tag } from "@/app/_types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useEffect } from "react";
 import { toast } from "sonner";
+import { useLoading } from "../_providers/loading-provider";
 
 /**
  * タグ一覧を取得するカスタムフック
  */
 export function useTags() {
-	return useQuery<Tag[]>({
+	const { showLoading, hideLoading } = useLoading();
+
+	const result = useQuery<Tag[]>({
 		queryKey: ["tags"],
 		queryFn: async () => {
 			const response = await fetch("/api/tags");
@@ -17,6 +21,17 @@ export function useTags() {
 			return data.data;
 		},
 	});
+
+	// ローディング状態が変更されたときにローディングアニメーションを表示/非表示
+	useEffect(() => {
+		if (result.isLoading) {
+			showLoading();
+		} else {
+			hideLoading();
+		}
+	}, [result.isLoading, showLoading, hideLoading]);
+
+	return result;
 }
 
 /**
@@ -24,24 +39,30 @@ export function useTags() {
  */
 export function useCreateTag() {
 	const queryClient = useQueryClient();
+	const { showLoading, hideLoading } = useLoading();
 
 	return useMutation({
 		mutationFn: async (tagData: { name: string; color: string }) => {
-			const response = await fetch("/api/tags", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(tagData),
-			});
+			showLoading();
+			try {
+				const response = await fetch("/api/tags", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(tagData),
+				});
 
-			const data = await response.json();
+				const data = await response.json();
 
-			if (!response.ok) {
-				throw new Error(data.error?.message || "タグの作成に失敗しました");
+				if (!response.ok) {
+					throw new Error(data.error?.message || "タグの作成に失敗しました");
+				}
+
+				return data.data as Tag;
+			} finally {
+				hideLoading();
 			}
-
-			return data.data as Tag;
 		},
 		onSuccess: (newTag) => {
 			// タグ一覧のキャッシュを更新
@@ -57,6 +78,7 @@ export function useCreateTag() {
  */
 export function useUpdateTag() {
 	const queryClient = useQueryClient();
+	const { showLoading, hideLoading } = useLoading();
 
 	return useMutation({
 		mutationFn: async ({
@@ -66,23 +88,28 @@ export function useUpdateTag() {
 			id: string;
 			data: { name?: string; color?: string };
 		}) => {
-			const response = await fetch(`/api/tags/${id}`, {
-				method: "PUT",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify(data),
-			});
+			showLoading();
+			try {
+				const response = await fetch(`/api/tags/${id}`, {
+					method: "PUT",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(data),
+				});
 
-			const responseData = await response.json();
+				const responseData = await response.json();
 
-			if (!response.ok) {
-				throw new Error(
-					responseData.error?.message || "タグの更新に失敗しました",
-				);
+				if (!response.ok) {
+					throw new Error(
+						responseData.error?.message || "タグの更新に失敗しました",
+					);
+				}
+
+				return responseData.data as Tag;
+			} finally {
+				hideLoading();
 			}
-
-			return responseData.data as Tag;
 		},
 		onSuccess: (updatedTag) => {
 			// タグ一覧のキャッシュを更新
@@ -98,20 +125,26 @@ export function useUpdateTag() {
  */
 export function useDeleteTag() {
 	const queryClient = useQueryClient();
+	const { showLoading, hideLoading } = useLoading();
 
 	return useMutation({
 		mutationFn: async (id: string) => {
-			const response = await fetch(`/api/tags/${id}`, {
-				method: "DELETE",
-			});
+			showLoading();
+			try {
+				const response = await fetch(`/api/tags/${id}`, {
+					method: "DELETE",
+				});
 
-			const data = await response.json();
+				const data = await response.json();
 
-			if (!response.ok) {
-				throw new Error(data.error?.message || "タグの削除に失敗しました");
+				if (!response.ok) {
+					throw new Error(data.error?.message || "タグの削除に失敗しました");
+				}
+
+				return id;
+			} finally {
+				hideLoading();
 			}
-
-			return id;
 		},
 		onSuccess: (_, variables) => {
 			// タグ一覧のキャッシュを更新

@@ -11,6 +11,8 @@ import {
 	DialogTrigger,
 } from "@/app/_components/ui/dialog";
 import { FloatingActionButton } from "@/app/_components/ui/floating-action-button";
+import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
+import { useLoading } from "@/app/_providers/loading-provider";
 import { Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -28,10 +30,13 @@ export function DeleteButton({ entryId }: DeleteButtonProps) {
 	const [isDeleting, setIsDeleting] = useState(false);
 	const [isDialogOpen, setIsDialogOpen] = useState(false);
 	const router = useRouter();
+	const { showLoading, hideLoading } = useLoading();
+	const { navigateWithLoading } = useLoadingNavigation();
 
 	// 日記削除処理
 	const handleDelete = async () => {
 		setIsDeleting(true);
+		showLoading();
 
 		try {
 			const response = await fetch(`/api/diary/${entryId}`, {
@@ -46,12 +51,13 @@ export function DeleteButton({ entryId }: DeleteButtonProps) {
 
 			toast.success("日記を削除しました");
 			setIsDialogOpen(false);
-			router.push("/diary");
+			navigateWithLoading("/diary");
 		} catch (error) {
 			console.error("Failed to delete diary entry:", error);
 			toast.error("日記の削除に失敗しました");
 		} finally {
 			setIsDeleting(false);
+			hideLoading();
 		}
 	};
 

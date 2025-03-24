@@ -3,11 +3,11 @@
 import { DiaryCard } from "@/app/_components/features/diary/diary-card";
 import { MonthNavigation } from "@/app/_components/features/diary/month-navigation";
 import { FloatingActionButton } from "@/app/_components/ui/floating-action-button";
+import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
 import type { Tag } from "@/app/_types";
 import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { cn } from "@/lib/utils";
 import { Plus } from "lucide-react";
-import Link from "next/link";
 import * as React from "react";
 
 interface MonthlyDiaryListProps {
@@ -38,6 +38,8 @@ export function MonthlyDiaryList({
 	onEntryClick,
 	className,
 }: MonthlyDiaryListProps) {
+	const { navigateWithLoading } = useLoadingNavigation();
+
 	// 日記エントリーに関連するタグを取得する関数
 	const getTagsForEntry = (entry: DiaryEntryWithTags) => {
 		if (!entry.tags || entry.tags.length === 0) return [];
@@ -47,6 +49,11 @@ export function MonthlyDiaryList({
 				tags.find((tag) => tag.id === tagRelation.tag.id) || tagRelation.tag
 			);
 		});
+	};
+
+	// 日記作成ページへの遷移
+	const handleCreateClick = () => {
+		navigateWithLoading("/diary/create");
 	};
 
 	return (
@@ -83,11 +90,9 @@ export function MonthlyDiaryList({
 			)}
 
 			{/* 日記追加ボタン */}
-			<Link href="/diary/create" aria-label="日記を作成">
-				<FloatingActionButton aria-label="日記を作成">
-					<Plus className="h-6 w-6" />
-				</FloatingActionButton>
-			</Link>
+			<FloatingActionButton aria-label="日記を作成" onClick={handleCreateClick}>
+				<Plus className="h-6 w-6" />
+			</FloatingActionButton>
 		</div>
 	);
 }

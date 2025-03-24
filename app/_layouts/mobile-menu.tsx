@@ -8,6 +8,7 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@/app/_components/ui/sheet";
+import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -21,6 +22,17 @@ const items = [
 export function MobileMenu() {
 	const [open, setOpen] = useState(false);
 	const pathname = usePathname();
+	const { navigateWithLoading } = useLoadingNavigation();
+
+	const handleLinkClick = (href: string, e: React.MouseEvent) => {
+		e.preventDefault();
+		// 現在と同じページの場合は遷移しない
+		if (pathname === href || (href !== "/" && pathname?.startsWith(href))) {
+			return;
+		}
+		setOpen(false); // メニューを閉じる
+		navigateWithLoading(href);
+	};
 
 	return (
 		<Sheet open={open} onOpenChange={setOpen}>
@@ -42,6 +54,7 @@ export function MobileMenu() {
 							<SheetClose asChild key={item.href}>
 								<Link
 									href={item.href}
+									onClick={(e) => handleLinkClick(item.href, e)}
 									className={cn(
 										"flex items-center px-4 py-2 text-lg font-medium",
 										isActive
