@@ -18,6 +18,7 @@ export const DiaryFormContainer = ({
 }) => {
 	const formId = useId();
 	const router = useRouter();
+	const today = new Date();
 
 	// 編集モードかどうかの判定（初期データの有無で判断）
 	const isEditMode = !!initialData?.entryDate;
@@ -28,8 +29,9 @@ export const DiaryFormContainer = ({
 	// フォームの状態管理
 	const [content, setContent] = useState(initialData?.content || "");
 	const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-		initialData?.entryDate || undefined,
+		initialData?.entryDate || today,
 	);
+
 	const [selectedEmotionId, setSelectedEmotionId] = useState<
 		number | undefined
 	>(initialData?.emotionStampId);
