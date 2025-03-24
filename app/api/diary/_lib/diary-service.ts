@@ -143,7 +143,7 @@ export async function createDiaryEntry(
 
 		if (existingEntry) {
 			throw new Error(
-				`該当日(${data.entryDate.toISOString().split("T")[0]})の日記エントリーは既に存在します`,
+				`該当日(${data.entryDate.toISOString().split("T")[0]})の日記は既に存在します`,
 			);
 		}
 
