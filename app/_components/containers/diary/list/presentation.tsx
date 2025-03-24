@@ -68,7 +68,7 @@ export function DiaryListPresentation({
 
 	// 日記エントリーをクリックしたときの処理
 	const handleEntryClick = (entryId: string) => {
-		navigateWithLoading(`/diary/${entryId}/edit`);
+		navigateWithLoading(`/diary/${entryId}`);
 	};
 
 	return (
