@@ -11,11 +11,10 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { ja } from "date-fns/locale";
 import { Calendar as CalendarIcon } from "lucide-react";
-import type { SelectSingleEventHandler } from "react-day-picker";
 
 type DatePickerProps = {
 	selected?: Date;
-	onSelect: SelectSingleEventHandler;
+	onSelect: (date: Date | undefined) => void;
 	error?: string;
 	disabled?: boolean;
 };
@@ -26,8 +25,36 @@ export const DatePicker = ({
 	error,
 	disabled,
 }: DatePickerProps) => {
-	const today = new Date();
-	today.setHours(23, 59, 59, 999);
+	// 日本時間の現在日
+	const now = new Date();
+	const today = new Date(
+		now.getFullYear(),
+		now.getMonth(),
+		now.getDate(),
+		9, // 日本時間の正午に設定することで UTC への変換時にも同じ日付を保持
+		0,
+		0,
+		0,
+	);
+
+	const handleDateSelect = (date: Date | undefined) => {
+		if (date) {
+			// タイムゾーンを考慮した日付設定
+			// UTC への変換で日付がずれないように時間を正午に設定
+			const selectedDate = new Date(
+				date.getFullYear(),
+				date.getMonth(),
+				date.getDate(),
+				9, // 日本時間の正午に設定
+				0,
+				0,
+				0,
+			);
+			onSelect(selectedDate);
+		} else {
+			onSelect(undefined);
+		}
+	};
 
 	return (
 		<Popover>
@@ -55,8 +82,19 @@ export const DatePicker = ({
 				<Calendar
 					mode="single"
 					selected={selected}
-					onSelect={onSelect}
-					disabled={(date) => date > today}
+					onSelect={handleDateSelect}
+					disabled={(date) => {
+						const compareDate = new Date(
+							date.getFullYear(),
+							date.getMonth(),
+							date.getDate(),
+							9, // 日本時間の正午に設定
+							0,
+							0,
+							0,
+						);
+						return compareDate > today;
+					}}
 					initialFocus
 					locale={ja}
 				/>
