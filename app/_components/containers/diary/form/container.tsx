@@ -1,6 +1,8 @@
 "use client";
 
+import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
 import { useTags } from "@/app/_hooks/use-tags";
+import { useLoading } from "@/app/_providers/loading-provider";
 import type { Tag } from "@/app/_types";
 import type { DiaryFormData, DiaryFormError } from "@/app/_types/diary/form";
 import { diaryFormSchema } from "@/app/_types/diary/validation";
@@ -18,6 +20,8 @@ export const DiaryFormContainer = ({
 }) => {
 	const formId = useId();
 	const router = useRouter();
+	const { showLoading, hideLoading } = useLoading();
+	const { navigateWithLoading } = useLoadingNavigation();
 	const today = new Date();
 
 	// 編集モードかどうかの判定（初期データの有無で判断）
@@ -41,6 +45,8 @@ export const DiaryFormContainer = ({
 
 	// エラー状態管理
 	const [errors, setErrors] = useState<DiaryFormError>({});
+	// 内部送信状態
+	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
 
 	// タグ選択ハンドラー
 	const handleTagSelect = (tagId: string) => {
@@ -87,9 +93,11 @@ export const DiaryFormContainer = ({
 
 		// エラーをリセット
 		setErrors({});
+		setIsSubmittingForm(true);
+		showLoading();
 
-		// バリデーションの実行
 		try {
+			// バリデーションの実行
 			// 基本データをバリデーション
 			const validationResult = diaryFormSchema.safeParse({
 				content,
@@ -122,41 +130,39 @@ export const DiaryFormContainer = ({
 			};
 
 			// APIリクエスト
-			try {
-				// 編集モードと新規作成モードでエンドポイントと方法を変える
-				const url = isEditMode
-					? `/api/diary/${getEntryIdFromDate(initialData.entryDate)}`
-					: "/api/diary";
-				const method = isEditMode ? "PUT" : "POST";
+			// 編集モードと新規作成モードでエンドポイントと方法を変える
+			const url = isEditMode
+				? `/api/diary/${getEntryIdFromDate(initialData.entryDate)}`
+				: "/api/diary";
+			const method = isEditMode ? "PUT" : "POST";
 
-				const response = await fetch(url, {
-					method,
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
-						...submissionData,
-						tagIds: selectedTags.map((tag) => tag.id),
-					}),
-				});
+			const response = await fetch(url, {
+				method,
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					...submissionData,
+					tagIds: selectedTags.map((tag) => tag.id),
+				}),
+			});
 
-				const data = await response.json();
+			const data = await response.json();
 
-				if (!response.ok) {
-					const errorMessage = data.message || "日記の保存に失敗しました";
-					setErrors({ _form: [errorMessage] });
-					return;
-				}
-
-				toast.success(isEditMode ? "日記を更新しました" : "日記を保存しました");
-				router.push("/diary");
-			} catch (error) {
-				console.error("Failed to save diary entry:", error);
-				setErrors({ _form: ["日記の保存に失敗しました"] });
+			if (!response.ok) {
+				const errorMessage = data.message || "日記の保存に失敗しました";
+				setErrors({ _form: [errorMessage] });
+				return;
 			}
+
+			toast.success(isEditMode ? "日記を更新しました" : "日記を保存しました");
+			navigateWithLoading("/diary");
 		} catch (error) {
-			console.error("Validation error:", error);
-			setErrors({ _form: ["入力内容に問題があります"] });
+			console.error("Failed to save diary entry:", error);
+			setErrors({ _form: ["日記の保存に失敗しました"] });
+		} finally {
+			setIsSubmittingForm(false);
+			hideLoading();
 		}
 	};
 
@@ -191,7 +197,7 @@ export const DiaryFormContainer = ({
 			onTagSelect={handleTagSelect}
 			onTagCreated={handleTagCreated}
 			onSubmit={handleSubmit}
-			isSubmitting={isSubmitting || isTagsLoading}
+			isSubmitting={isSubmitting || isTagsLoading || isSubmittingForm}
 			allTags={tags}
 			isEditMode={isEditMode}
 		/>
