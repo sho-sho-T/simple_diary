@@ -5,7 +5,6 @@ import type { DiaryEntryWithTags } from "@/app/api/diary/_lib/diary-service";
 import { getDiaryEntryById } from "@/app/api/diary/_lib/diary-service";
 import { getCurrentUserId } from "@/lib/auth-utils";
 import { notFound, redirect } from "next/navigation";
-import { DeleteButton } from "./delete-button";
 
 /**
  * 日記編集ページ
@@ -41,8 +40,7 @@ export default async function DiaryEditPage({
 			<>
 				<Header />
 				<div className="container mx-auto py-6 max-w-4xl relative">
-					<DiaryForm initialData={initialData} />
-					<DeleteButton entryId={id} />
+					<DiaryForm initialData={initialData} entryId={id} />
 				</div>
 			</>
 		);
