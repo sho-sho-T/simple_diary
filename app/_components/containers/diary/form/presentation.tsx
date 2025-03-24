@@ -31,6 +31,8 @@ type DiaryFormPresentationProps = {
 	isSubmitting: boolean;
 	allTags?: Tag[]; // タグリスト（実際の実装ではAPIから取得など）
 	isEditMode?: boolean; // 編集モードかどうか
+	entryId?: string; // 日記エントリーID（削除ボタン用）
+	onDelete?: () => void; // 削除ボタンがクリックされた時のハンドラ
 };
 
 export const DiaryFormPresentation = ({
@@ -49,6 +51,8 @@ export const DiaryFormPresentation = ({
 	isSubmitting,
 	allTags = [], // 仮の空配列（実際の実装では適切に初期化）
 	isEditMode = false, // デフォルトは新規作成モード
+	entryId,
+	onDelete,
 }: DiaryFormPresentationProps) => {
 	return (
 		<form
@@ -130,8 +134,18 @@ export const DiaryFormPresentation = ({
 				</p>
 			)}
 
-			{/* 保存ボタン */}
-			<div className="flex justify-end">
+			{/* ボタンエリア */}
+			<div className="flex justify-end gap-3">
+				{isEditMode && entryId && onDelete && (
+					<Button
+						type="button"
+						variant="destructive"
+						onClick={onDelete}
+						disabled={isSubmitting}
+					>
+						削除する
+					</Button>
+				)}
 				<Button
 					type="submit"
 					className="px-8 py-2 rounded-md"

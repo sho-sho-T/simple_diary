@@ -1,11 +1,21 @@
 "use client";
 
+import { Button } from "@/app/_components/ui/button";
+import {
+	Dialog,
+	DialogContent,
+	DialogDescription,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from "@/app/_components/ui/dialog";
 import { useLoadingNavigation } from "@/app/_hooks/use-loading-navigation";
 import { useTags } from "@/app/_hooks/use-tags";
 import { useLoading } from "@/app/_providers/loading-provider";
 import type { Tag } from "@/app/_types";
 import type { DiaryFormData, DiaryFormError } from "@/app/_types/diary/form";
 import { diaryFormSchema } from "@/app/_types/diary/validation";
+import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
 import { useId, useState } from "react";
 import { toast } from "sonner";
@@ -14,18 +24,21 @@ import { DiaryFormPresentation } from "./presentation";
 export const DiaryFormContainer = ({
 	initialData,
 	isSubmitting = false,
+	entryId = "", // 編集時には親コンポーネントからIDを渡すようにする
 }: {
 	initialData?: DiaryFormData;
 	isSubmitting?: boolean;
+	entryId?: string;
 }) => {
 	const formId = useId();
 	const router = useRouter();
+	const pathname = usePathname();
 	const { showLoading, hideLoading } = useLoading();
 	const { navigateWithLoading } = useLoadingNavigation();
 	const today = new Date();
 
-	// 編集モードかどうかの判定（初期データの有無で判断）
-	const isEditMode = !!initialData?.entryDate;
+	// 編集モードかどうかの判定（初期データとIDの有無で判断）
+	const isEditMode = !!initialData?.entryDate && !!entryId;
 
 	// タグ一覧の取得
 	const { data: tags = [], isLoading: isTagsLoading } = useTags();
@@ -47,6 +60,10 @@ export const DiaryFormContainer = ({
 	const [errors, setErrors] = useState<DiaryFormError>({});
 	// 内部送信状態
 	const [isSubmittingForm, setIsSubmittingForm] = useState(false);
+	// 削除確認ダイアログの状態
+	const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+	// 削除処理の状態
+	const [isDeleting, setIsDeleting] = useState(false);
 
 	// タグ選択ハンドラー
 	const handleTagSelect = (tagId: string) => {
@@ -131,9 +148,7 @@ export const DiaryFormContainer = ({
 
 			// APIリクエスト
 			// 編集モードと新規作成モードでエンドポイントと方法を変える
-			const url = isEditMode
-				? `/api/diary/${getEntryIdFromDate(initialData.entryDate)}`
-				: "/api/diary";
+			const url = isEditMode ? `/api/diary/${entryId}` : "/api/diary";
 			const method = isEditMode ? "PUT" : "POST";
 
 			const response = await fetch(url, {
@@ -166,40 +181,92 @@ export const DiaryFormContainer = ({
 		}
 	};
 
-	// 日付からエントリーIDを取得する補助関数
-	const getEntryIdFromDate = (date: Date): string => {
-		// URLからIDを取得（/diary/[id]/edit の形式を想定）
-		const path = window.location.pathname;
-		const match = path.match(/\/diary\/([^/]+)\/edit/);
+	// 削除確認ダイアログを開くハンドラー
+	const handleDeleteClick = () => {
+		setIsDeleteDialogOpen(true);
+	};
 
-		if (match?.[1]) {
-			return match[1];
+	// 日記削除処理
+	const handleDelete = async () => {
+		if (!isEditMode || !entryId) return;
+
+		setIsDeleting(true);
+		showLoading();
+
+		try {
+			const response = await fetch(`/api/diary/${entryId}`, {
+				method: "DELETE",
+			});
+
+			if (!response.ok) {
+				const data = await response.json();
+				toast.error(data.message || "日記の削除に失敗しました");
+				return;
+			}
+
+			toast.success("日記を削除しました");
+			setIsDeleteDialogOpen(false);
+			navigateWithLoading("/diary");
+		} catch (error) {
+			console.error("Failed to delete diary entry:", error);
+			toast.error("日記の削除に失敗しました");
+		} finally {
+			setIsDeleting(false);
+			hideLoading();
 		}
-
-		// IDが取得できない場合は新規作成扱い
-		console.warn(
-			"編集モードですが、IDが特定できません。新規作成として処理します。",
-		);
-		return "";
 	};
 
 	return (
-		<DiaryFormPresentation
-			formId={formId}
-			content={content}
-			selectedDate={selectedDate}
-			selectedEmotionId={selectedEmotionId}
-			selectedTags={selectedTags}
-			errors={errors}
-			onContentChange={handleContentChange}
-			onDateSelect={handleDateSelect}
-			onEmotionSelect={handleEmotionSelect}
-			onTagSelect={handleTagSelect}
-			onTagCreated={handleTagCreated}
-			onSubmit={handleSubmit}
-			isSubmitting={isSubmitting || isTagsLoading || isSubmittingForm}
-			allTags={tags}
-			isEditMode={isEditMode}
-		/>
+		<>
+			<DiaryFormPresentation
+				formId={formId}
+				content={content}
+				selectedDate={selectedDate}
+				selectedEmotionId={selectedEmotionId}
+				selectedTags={selectedTags}
+				errors={errors}
+				onContentChange={handleContentChange}
+				onDateSelect={handleDateSelect}
+				onEmotionSelect={handleEmotionSelect}
+				onTagSelect={handleTagSelect}
+				onTagCreated={handleTagCreated}
+				onSubmit={handleSubmit}
+				isSubmitting={
+					isSubmitting || isTagsLoading || isSubmittingForm || isDeleting
+				}
+				allTags={tags}
+				isEditMode={isEditMode}
+				entryId={entryId}
+				onDelete={handleDeleteClick}
+			/>
+
+			{/* 削除確認ダイアログ */}
+			<Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+				<DialogContent>
+					<DialogHeader>
+						<DialogTitle>日記の削除</DialogTitle>
+						<DialogDescription>
+							この日記を削除します。この操作は元に戻せません。
+						</DialogDescription>
+					</DialogHeader>
+					<DialogFooter className="mt-4">
+						<Button
+							variant="outline"
+							onClick={() => setIsDeleteDialogOpen(false)}
+							disabled={isDeleting}
+						>
+							キャンセル
+						</Button>
+						<Button
+							variant="destructive"
+							onClick={handleDelete}
+							disabled={isDeleting}
+						>
+							{isDeleting ? "削除中..." : "削除する"}
+						</Button>
+					</DialogFooter>
+				</DialogContent>
+			</Dialog>
+		</>
 	);
 };
